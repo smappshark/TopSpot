@@ -1,8 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://java.sun.com/xml/ns/javaee"
-xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-  
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<servlet>
+		<servlet-name>RegistrationServlet</servlet-name>
+		<servlet-class>com.topspot.register.servlet.UserRegistrationServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RegistrationServlet</servlet-name>
+		<url-pattern>/registrationServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ActionServlet</servlet-name>
+		<servlet-class>com.topspot.register.servlet.ActionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ActionServlet</servlet-name>
+		<url-pattern>/ActionServlet/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InitiateBayutServlet</servlet-name>
+		<servlet-class>com.topspot.register.servlet.InitiateBayutServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InitiateBayutServlet</servlet-name>
+		<url-pattern>/InitiateBayutServlet/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InitiateJustPropertyServlet</servlet-name>
+		<servlet-class>com.topspot.register.servlet.InitiateJustPropertyServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InitiateJustPropertyServlet</servlet-name>
+		<url-pattern>/InitiateJustPropertyServlet/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InitiateJustRentalsServlet</servlet-name>
+		<servlet-class>com.topspot.register.servlet.InitiateJustRentalsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InitiateJustRentalsServlet</servlet-name>
+		<url-pattern>/InitiateJustRentalsServlet/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InitiatePropertyFinderServlet</servlet-name>
+		<servlet-class>com.topspot.register.servlet.InitiatePropertyFinderServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InitiatePropertyFinderServlet</servlet-name>
+		<url-pattern>/InitiatePropertyFinderServlet/*</url-pattern>
+	</servlet-mapping>
 </web-app>
