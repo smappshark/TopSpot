@@ -44,10 +44,6 @@
 {
     margin-top: 274px;
 }
-.loader {
-    width: 20%;
-    padding: 100px 200px 0 200px;
-}
 #tblLongTerm, #tblShortTerm, #tbl_rt_LongTerm, #tbl_rt_ShortTerm {
     font-size:9px;
 }

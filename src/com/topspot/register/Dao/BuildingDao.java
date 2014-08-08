@@ -1,6 +1,7 @@
 package com.topspot.register.Dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
@@ -15,6 +16,8 @@ import com.google.gson.Gson;
 import com.topspot.ConnectionUtil;
 import com.topspot.common.Constants;
 import com.topspot.register.beans.Building;
+import com.topspot.register.beans.InvestorComments;
+import com.topspot.response.TopSpotResponse;
 
 /**
  * 
@@ -165,7 +168,6 @@ public class BuildingDao {
 				build.setLongitude(String.valueOf(rs.getDouble("Longitude")));
 				build.setImageUrl(rs.getString("ImageLink"));
 				build.setComments(rs.getString("Comments"));
-				build.setComments(rs.getString("AvgRent"));
 				buildingList.add(build);
 			}
 
@@ -543,7 +545,7 @@ public class BuildingDao {
 		try {
 			conn = ConnectionUtil.getConnection();
 
-			String query = "SELECT DISTINCT(Bedrooms) FROM TameerClientDB.newton WHERE Bedrooms != \"\" AND com_res LIKE \"Res%\" ORDER BY Bedrooms ASC";
+			String query = "SELECT DISTINCT(Bedrooms) FROM " + DBName + ".newton WHERE Bedrooms != \"\" AND com_res LIKE \"Res%\" ORDER BY Bedrooms ASC";
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
@@ -563,7 +565,7 @@ public class BuildingDao {
 			try {
 				conn = ConnectionUtil.getConnection();
 	
-				String query = "SELECT COUNT(Bedrooms) AS Count, Price_AED FROM TameerClientDB.newton WHERE Bedrooms=\"" + bedrooms + "\" GROUP BY Price_AED  Order By Price_AED ASC";
+				String query = "SELECT COUNT(Bedrooms) AS Count, Price_AED FROM " + DBName + ".newton WHERE Bedrooms=\"" + bedrooms + "\" GROUP BY Price_AED  Order By Price_AED ASC";
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
 	
@@ -575,5 +577,47 @@ public class BuildingDao {
 			}
 		}
 		return objBedrooms;
+	}
+	
+	public static TopSpotResponse setInvestorComments(InvestorComments objInvestorComments) {
+		TopSpotResponse objTopSpotResponse = new TopSpotResponse();
+		if (objInvestorComments != null) {
+			Connection conn = null;
+			try {
+				
+				conn = ConnectionUtil.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("INSERT INTO investor_comments (investorId, propertyId, City, " + 
+	                     "Area, Building, Developer, Comments) VALUES(?,?,?,?,?,?,?)");
+				
+				// TODO: assign investor ID to 1st value
+				pstmt.setInt(1, (int) ((System.currentTimeMillis() / 1000L) / 10000));
+				pstmt.setInt(2, objInvestorComments.getPropertyId());
+				pstmt.setString(3, objInvestorComments.getCity());
+				pstmt.setString(4, objInvestorComments.getArea());
+				pstmt.setString(5, objInvestorComments.getBuilding());
+				pstmt.setString(6, objInvestorComments.getDeveloper());
+				pstmt.setString(7, objInvestorComments.getComments());
+
+
+				conn.setAutoCommit(true);
+				int rowCount = pstmt.executeUpdate();
+				if (rowCount == 1) {
+					objTopSpotResponse.setCode(0);
+					objTopSpotResponse.setMessage("Success");
+				} else {
+					objTopSpotResponse.setCode(1);
+					objTopSpotResponse.setMessage("DB Server Error...");
+				}
+				
+			} catch (Exception e) {
+				//e.printStackTrace();
+				objTopSpotResponse.setCode(1);
+				objTopSpotResponse.setMessage(e.getMessage());
+			}
+		} else {
+			objTopSpotResponse.setCode(1);
+			objTopSpotResponse.setMessage("Input was empty...");
+		}
+		return objTopSpotResponse;
 	}
 }

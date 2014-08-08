@@ -222,3 +222,8 @@ table.investor_tbl tr:nth-child(even){
     padding:2px 5px;
     cursor:pointer;
 }
+.loader {
+    width: 20%;
+    padding: 100px 200px 0 200px;
+    position:absolute;
+}

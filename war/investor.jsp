@@ -9,6 +9,31 @@
 <script type='text/javascript' src='js/jquery-1.2.3.min.js'></script>
 <script type='text/javascript' src='js/menu.js'></script>
 <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script> 
+
+// Save Comments - Start
+	function js_buildingDetails_click(dis) {
+		var table = $( dis ).parent().parent().parent();
+		var data = {};
+		data.city = table[0].children[0].children[1].childNodes[0].data;
+		data.area = table[0].children[1].children[1].childNodes[0].data;
+		data.building = table[0].children[2].children[1].childNodes[0].data;
+		data.developer = table[0].children[3].children[3].childNodes[0].data;
+		data.comments = table[0].children[4].children[1].childNodes[0].value;
+		data.propertyId = table[0].children[6].children[0].childNodes[0].data;
+		data.serviceName = "setInvestorComments";
+		console.log(data);
+		jQuery(".loader").show();
+		jQuery.get('ActionServlet', data, function(responseJson) {
+			alert("Saved successfully");
+			jQuery(".loader").hide();
+			table[0].children[4].children[1].childNodes[0].value = "";
+			// Binding ResponseJSON to architecturalStyle dropdown - End
+		});
+	}
+// Save Comments - End
+
+</script>
 <!--#BAEDFF-->
 </head>
 
@@ -73,12 +98,17 @@
 				</ul>
 			</div>
 			<div class="rightBlock" id="rightBlockDiv">
-				<h1>Fact Sheet</h1>
-				<h2>
-					<ul>
-						<li>Info in static Table + Pics</li>
-					</ul>
-				</h2>
+				<div class="loader">
+                    <img src="img/loader.gif">
+                </div>
+                <div class="js_trigger">
+					<h1>Fact Sheet</h1>
+					<h2>
+						<ul>
+							<li>Info in static Table + Pics</li>
+						</ul>
+					</h2>
+				</div>
 <!-- 
 				<table class="investor_tbl" cellspacing="0" width="70%"
 					cellpadding="3">

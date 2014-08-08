@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.gson.Gson;
 import com.topspot.register.Dao.BuildingDao;
 import com.topspot.register.beans.Building;
+import com.topspot.register.beans.InvestorComments;
+import com.topspot.response.TopSpotResponse;
 
 /**
  * Servlet implementation class ActionServlet
@@ -166,6 +168,17 @@ public class ActionServlet extends HttpServlet {
 					String bedrooms = request.getParameter("bedrooms");
 					List<Building> buildObjs = BuildingDao.getBedroomHistogram(bedrooms);
 					json = new Gson().toJson(buildObjs);
+				} else if (StringUtils.equals("setInvestorComments", service)) {
+					InvestorComments objInvestorComments = new InvestorComments();
+					objInvestorComments.setPropertyId(Integer.parseInt(request.getParameter("propertyId")));
+					objInvestorComments.setCity(request.getParameter("city"));
+					objInvestorComments.setArea(request.getParameter("area"));
+					objInvestorComments.setBuilding(request.getParameter("building"));
+					objInvestorComments.setDeveloper(request.getParameter("developer"));
+					objInvestorComments.setComments(request.getParameter("comments"));
+					
+					TopSpotResponse objTopSpotResponse = BuildingDao.setInvestorComments(objInvestorComments);
+					json = new Gson().toJson(objTopSpotResponse);
 				}
 			}
 			response.setContentType("application/json");
