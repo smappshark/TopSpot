@@ -16,6 +16,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.topspot.common.Constants;
 public class ProcessPropertyFinder 
 {
 	private static Connection conn = null;
@@ -23,6 +25,8 @@ public class ProcessPropertyFinder
 	private static int connCounter = 0;
 	private PreparedStatement pstmt = null;
 	private static List<ParseBean> listPropertyFinderPB = new ArrayList<ParseBean>();
+	static Constants objConstants = new Constants();
+	private static String DBName = objConstants.getValue("DBName");
 	public void process()
 	{
 		System.out.println(GetCurrentTimestamp() + "  Processing Property Finder data......");
@@ -59,7 +63,7 @@ public class ProcessPropertyFinder
 		List<ParseBean> listPB = new ArrayList<ParseBean>();
 		try (Connection connection = UtilityClass.dbConnection();Statement stmt = connection.createStatement();) 
 		{
-			String query = "SELECT link, Category, Rent_Sales FROM TameerClientDB.domain_links WHERE Domain = 'propertyfinder.ae'  LIMIT 317, 9999";
+			String query = "SELECT link, Category, Rent_Sales FROM " + DBName + ".domain_links WHERE Domain = 'propertyfinder.ae'  LIMIT 317, 9999";
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) 
 			{

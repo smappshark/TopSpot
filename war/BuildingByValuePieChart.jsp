@@ -1,7 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.*" %>
-<%@page import="tameer.ValuePieChartHelper"%>
-<%@page import="tameer.TopspotBean"%>
+<%@page import="topspot.ValuePieChartHelper"%>
+<%@page import="topspot.TopspotBean"%>
 
 <%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

@@ -1,5 +1,5 @@
-<%@page import="tameer.ConnectToCloudSQL"%>
-<%@page import="tameer.BuildingTrendDetails"%>
+<%@page import="topspot.ConnectToCloudSQL"%>
+<%@page import="topspot.BuildingTrendDetails"%>
 <%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>

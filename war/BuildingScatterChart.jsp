@@ -1,4 +1,4 @@
-<%@page import="tameer.ScatterChartHelper"%>
+<%@page import="topspot.ScatterChartHelper"%>
 <%@page import="java.util.*"%>
 <%@ page import="java.sql.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

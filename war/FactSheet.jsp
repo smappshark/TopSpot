@@ -1,5 +1,5 @@
-<%@page import="tameer.FactSheetHelper"%>
-<%@page import="tameer.BuildingTrendDetails"%>
+<%@page import="topspot.FactSheetHelper"%>
+<%@page import="topspot.BuildingTrendDetails"%>
 <%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>

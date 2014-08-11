@@ -53,5 +53,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.apache.commons.collections.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/transaction-api-1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="D:/Srihari/Workspace_Luna/TopSpot/war/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

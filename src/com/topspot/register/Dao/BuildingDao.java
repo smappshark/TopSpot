@@ -26,8 +26,8 @@ import com.topspot.response.TopSpotResponse;
  */
 
 public class BuildingDao {
-	Constants objConstants = new Constants();
-	private static String DBName = "TameerClientDB";// objConstants.getValue("DBName");
+	static Constants objConstants = new Constants();
+	private static String DBName = objConstants.getValue("DBName");
 
 	public static List<Building> getBuildingDetails(String area,
 			String subarea, String buildingstr) {

@@ -1,7 +1,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.sql.*"%>
-<%@page import="tameer.ValuePieChartHelper"%>
-<%@page import="tameer.TopspotBean"%>
+<%@page import="topspot.ValuePieChartHelper"%>
+<%@page import="topspot.TopspotBean"%>
 <%@ page import="com.topspot.common.Constants" %>
 <%@ page import="com.topspot.ConnectionUtil" %>
 
@@ -71,7 +71,6 @@ ddaccordion.init({
 		//Class.forName("com.mysql.jdbc.GoogleDriver");
         //url = "jdbc:google:mysql://optimum-time-518:tameer-db/TameerClientDB?user=root";
          
-		DBName = "TameerClientDB";
 		String req_Area = null;
 		String req_Sub_Area = null;
 		String req_Building_Type = null;
