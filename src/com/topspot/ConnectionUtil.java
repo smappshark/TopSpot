@@ -25,13 +25,7 @@ public class ConnectionUtil {
 	 //private constructor
     private ConnectionUtil() {
         try {
-        	if (SystemProperty.environment.value() ==
-      		      SystemProperty.Environment.Value.Production) {
-        	Class.forName(objConstants.getValue("GAEDBDriver"));
-        	} else {
-        		Class.forName(objConstants.getValue("LocalDBDriver"));
-        	}
-        	
+        	Class.forName(objConstants.getValue("DBDriver"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -41,28 +35,8 @@ public class ConnectionUtil {
         Connection connection = null;
         String URL = null;
         try {
-        	
-        	
-        	if (SystemProperty.environment.value() ==
-        		      SystemProperty.Environment.Value.Production) {
-        		    // Load the class that provides the new "jdbc:google:mysql://" prefix.
-        		  // URL = "jdbc:google:mysql://your-project-id:your-instance-name/guestbook?user=root";
-        		  
-        		   URL = objConstants.getValue("GAEDBUrl") + objConstants.getValue("DBName") + "?user="
-          					+ objConstants.getValue("DBUserName");
-        		  } else {
-        		    // Local MySQL instance to use during development.
-        		   //URL = "jdbc:mysql://127.0.0.1:3306/guestbook?user=root";
-        		  URL = objConstants.getValue("LOCALDBUrl") + objConstants.getValue("DBName") + "?user="
-             					+ objConstants.getValue("DBUserName") + "&password=" + objConstants.getValue("DBPassword");
-       		   
-        	}
-        	//local url
-        	
-        	
-        	//Google app engine url
-        	// URL = objConstants.getValue("DBUrl") + objConstants.getValue("DBName") + "?user="+ objConstants.getValue("DBUserName");
-        	
+        	URL = objConstants.getValue("DBUrl") + objConstants.getValue("DBName") + "?user=" + objConstants.getValue("DBUserName");
+        	//URL = objConstants.getValue("DBUrl") + objConstants.getValue("DBName") + "?user=" + objConstants.getValue("DBUserName")+ "&password=" + objConstants.getValue("DBPassword");
         	log.info("DB URL: " + URL);
             connection = DriverManager.getConnection(URL);
         } catch (SQLException e) {

@@ -1,17 +1,18 @@
+<%@page import="topspot.ConnectToCloudSQL"%>
+<%@page import="topspot.BuildingTrendDetails"%>
+<%@page import="java.util.*"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.sql.*"%>
+<%@page import="topspot.ValuePieChartHelper"%>
+<%@page import="topspot.TopspotBean"%>
+<%@ page import="com.topspot.common.Constants" %>
+<%@ page import="com.topspot.ConnectionUtil" %>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html class="sidebar sidebar-discover">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>TopSpot</title>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script type='text/javascript' src='js/menu.js'></script>
-<link rel="stylesheet" href="css/style.css" type="text/css" />
-<link rel="stylesheet"
-    href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script type="text/javascript" src="js/ddaccordion.js"></script>
 <style>
 .toptobottom {
     width: 0;
@@ -19,16 +20,18 @@
     text-align: center;
 }
 .floatLeft{
-    float: Left;
+    /*float: Left;*/
 }
 .mar_left_50 {
     margin-left: 50px;
 }
 .width_71_p {
-    width: 71%; 
+  /*  width: 72%;*/ 
+  float: left;
 }
 .pad_5 {
     padding: 5px;
+    float: left;
 }
 .pad_7 {
     padding: 7px;
@@ -42,66 +45,124 @@
 }
 .shortterm
 {
-    margin-top: 274px;
+    /*margin-top: 274px;*/
 }
 #tblLongTerm, #tblShortTerm, #tbl_rt_LongTerm, #tbl_rt_ShortTerm {
     font-size:9px;
 }
 </style>
-</head>
-<body>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<script src="js/components/library/jquery/jquery.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/library/jquery/jquery-migrate.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/library/modernizr/modernizr.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/less-js/less.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script>
+    
+    function selectedBuildingOne(selectedBuidling){
+    	$('#buildingOne').text("");
+    	$('#buildingOne').text(selectedBuidling);
+    	$('#hid_Building1').val(selectedBuidling);
+    }
+    
+    function selectedBuildingTwo(selectedBuidling){
+    	$('#buildingTwo').text("");
+    	$('#buildingTwo').text(selectedBuidling);
+    	$('#hid_Building2').val(selectedBuidling);
+    }
 
-    <form action="growthreturnmatrix.jsp">
-        <div class="nav-wrap">
-            <div class="nav">
-                <ul>
-                    <li><a href="#">Charts</a></li>
-                    <li><a href="buildMap.jsp">Maps</a></li>
-                    <li><a href="#">Histogram</a></li>
-                    <li><a href="#">Scatter Charts</a></li>
-                    <li><a href="#">Mash Charts</a></li>
-                    <li><a href="signin.jsp">SignIn</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="main">
-            <div class="header">
-                <div class="logo">
-                    <img src="images/topspot-logo.png" />
-                </div>
-            </div>
-            <div class="container">
-                <div class="searchbg">
-                    <table width="100%">
-                        <tr>
-                            <td>Buildings</td>
-                        </tr>
-                        <tr>
-                            <td><select id="ddBuildings"></select></td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="leftBlock">
-                    <ul>
-                        <li><a href="BuildingPieChart.jsp">Pie Charts by count</a></li>
-                        <li><a href="BuildingByValuePieChart.jsp">Pie Charts by
-                                value</a></li>
-                        <li><a href="PopularBuildingsBarChart.jsp">Bar Charts</a></li>
-                        <li><a href="LineChart.jsp">Line Charts</a></li>
-                        <li><a href="BuildingScatterChart.jsp">Scatter Charts</a></li>
-                    </ul>
-                </div>
-                <div class="rightBlock">
-                    <div class="loader">
-                        <img src="img/loader.gif">
-                    </div>
-                    <div class="wrapper" id="dataContainer">
-                        <div>
+    function selectedBuildingThree(selectedBuidling){
+    	$('#buildingThree').text("");
+    	$('#buildingThree').text(selectedBuidling);
+    	$('#hid_Building3').val(selectedBuidling);
+    }
+
+    if ( /*@cc_on!@*/ false && document.documentMode === 10)
+    {
+        document.documentElement.className += ' ie ie10';
+    }
+    </script>
+    
+     <link rel="stylesheet" href="css/admin/module.admin.stylesheet-complete.sidebar_type.discover.min.css"/>
+    
+    <!--dropdown menu-->
+    <link rel="stylesheet" href="css/topspot_style.css"/>
+    <!--<script src="../assets/components/core/js/jquery-1.2.3.min.js"></script>-->
+    <script src="js/components/core/js/menu.js"></script>
+    <!--dropdown menu end-->
+    
+    <!--expand div-->
+    <link rel="stylesheet" href="css/style_exp.css"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="tcal.css" />
+    <!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+    <script type="text/javascript" src="tcal.js"></script> 
+    <script src="js/components/core/js/ddaccordion.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+       <script type="text/javascript">
+        //Initialize 2nd demo:
+        ddaccordion.init({
+            headerclass : "tabContentSec", //Shared CSS class name of headers group
+            contentclass : "tabContent_data", //Shared CSS class name of contents group
+            revealtype : "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
+            mouseoverdelay : 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
+            collapseprev : false, //Collapse previous content (so only one open at any time)? true/false 
+            defaultexpanded : [ 0 ], //index of content(s) open by default [0, 1, etc]. [] denotes no content.
+            onemustopen : false, //Specify whether at least one header should be open always (so never all headers closed)
+            animatedefault : false, //Should contents open by default be animated into view?
+            persiststate : true, //persist state of opened contents within browser session?
+            toggleclass : [ "closedlanguage", "openlanguage" ], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
+            //togglehtml: ["prefix", "<img src='images/plus.png' style='width:18px; height:18px; float:left; margin-top:6px;' /> ", "<img src='images/minus.png' style='width:18px; height:18px; float:left; margin-top:6px;' />  "], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
+            animatespeed : "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
+            oninit : function(expandedindices) { //custom code to run when headers have initalized
+                //do nothing
+            },
+            onopenclose : function(header, index, state, isuseractivated) { //custom code to run whenever a header is opened or closed
+                //do nothing
+            }
+        })
+    </script>
+    <script type='text/javascript' src='js/growthreturnmatrix.js'></script>
+</head>
+
+
+<form action="growthreturnmatrix.jsp" method="post">
+   <!-- Main Container Fluid -->
+    <div class="container-fluid menu-hidden">
+    <!--  Side Menu -->
+ 		<%@ include file="includes/Menu.jsp" %>
+    <!--  Side Menu -->
+    
+      <!-- Content -->
+        <div id="content">
+          <%@ include file="includes/header.jsp" %>
+            <div class="innerLR">
+                <h2 class="margin-none">Analytics &nbsp;<i class="fa fa-fw fa-pencil text-muted"></i>
+                </h2>
+                <div class="row">
+                    <div class="col-md-8" style="width:100%">
+                         <div class="subnav">
+                            <ul id="nav">
+                                <li><select id="ddBuildings"></select></li>
+                                </ul>
+                       </div>
+                        <!-- Widget -->
+                        <div class=" widget widget-body-white " style="width:100%; min-height: 578px;">
+                        
+                            <div class="widget-body innerAll" style="min-height:575px;">
+                                <!-- Chart with lines and fill with no points -->
+                              <!--  <div id="chart_lines_fill_nopoints_2" class="flotchart-holder"></div>-->
+                                <div class="rightBlock">
+                                  <div class="loader">
+                       				 <img src="img/loader.gif">
+              				      </div>
+								  <div class="wrapper" id="dataContainer">
+                        <div style="float:left; width:100%;">
                             <div class="floatLeft">
                                 <label>Long Term</label>
                             </div>
-                            <br />
-                            <br />
                             <div class="floatLeft width_71_p pad_5">
                                 <table frame="box" rules="all" cellpadding="3" id="tblLongTerm" >
                                     <tr><th></th><th colspan="9">GROWTH</th></tr>
@@ -137,12 +198,11 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div style="margin-top:30px;">
                             <div class="shortterm">
                                 <label>Short Term</label>
                             </div>
-                            <br />
-                            <br />
+                           
                             <div class="floatLeft width_71_p pad_5">
                                 <table frame="box" rules="all" cellpadding="3" id="tblShortTerm">
                                     <tr><th></th><th colspan="9">GROWTH</th></tr>
@@ -178,44 +238,69 @@
                             </div>
                         </div>
                     </div>
+							 </div>
+							 <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                      
+                       
+                        </div>
+                        <!-- // End Widget -->
+                    
+                    </div>
+                  
                 </div>
             </div>
         </div>
-        <div class="footer-wrap">
-            <div class="footer">
-                <p style="color: #e51737; padding: 5px;">For Sale, For Rent, For
-                    Investment, For Advise</p>
-                <p style="color: #052f6e;">Call Top Spot Tel: +971 4 430 6228 /
-                    Fax: +971 4 430 6229 info@topspot.ae / Visit us at Regal Tower,
-                    Business Bay, Dubai, United Arab Emirates</p>
-            </div>
-        </div>
-    </form>
+        <!-- // Content END -->
+         <div class="clearfix"></div>
+            <!--  Side Menu -->
+    <%@ include file="includes/footer.jsp" %>
+    <!--  Side Menu -->
+       
 
-    <script type="text/javascript">
-        //Initialize 2nd demo:
-        ddaccordion.init({
-            headerclass : "tabContentSec", //Shared CSS class name of headers group
-            contentclass : "tabContent_data", //Shared CSS class name of contents group
-            revealtype : "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
-            mouseoverdelay : 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
-            collapseprev : false, //Collapse previous content (so only one open at any time)? true/false 
-            defaultexpanded : [ 0 ], //index of content(s) open by default [0, 1, etc]. [] denotes no content.
-            onemustopen : false, //Specify whether at least one header should be open always (so never all headers closed)
-            animatedefault : false, //Should contents open by default be animated into view?
-            persiststate : true, //persist state of opened contents within browser session?
-            toggleclass : [ "closedlanguage", "openlanguage" ], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
-            //togglehtml: ["prefix", "<img src='images/plus.png' style='width:18px; height:18px; float:left; margin-top:6px;' /> ", "<img src='images/minus.png' style='width:18px; height:18px; float:left; margin-top:6px;' />  "], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
-            animatespeed : "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
-            oninit : function(expandedindices) { //custom code to run when headers have initalized
-                //do nothing
-            },
-            onopenclose : function(header, index, state, isuseractivated) { //custom code to run whenever a header is opened or closed
-                //do nothing
-            }
-        })
+        
+        
+         <!-- Global -->
+   	 <script data-id="App.Config">
+	    var App = {};
+	    var basePath = '',
+	        commonPath = 'js',
+	        rootPath = '/',
+	        DEV = false,
+	        componentsPath = 'js/components/';
+	    var primaryColor = '#3695d5',
+	        dangerColor = '#b55151',
+	        successColor = '#609450',
+	        infoColor = '#4a8bc2',
+	        warningColor = '#ab7a4b',
+	        inverseColor = '#45484d';
+	    var themerPrimaryColor = primaryColor;
     </script>
-    <script type='text/javascript' src='js/growthreturnmatrix.js'></script>
-</body>
+    	
+    <script src="js/components/library/bootstrap/js/bootstrap.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/nicescroll/jquery.nicescroll.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/breakpoints/breakpoints.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/preload/pace/pace.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/preload/pace/preload.pace.init.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/core/js/animations.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/jquery.flot.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/jquery.flot.resize.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/plugins/jquery.flot.tooltip.min.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotcharts.common.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotchart-line-2.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotchart-mixed-1.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotchart-bars-horizontal.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/easy-pie/assets/lib/js/jquery.easy-pie-chart.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/easy-pie/assets/custom/easy-pie.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/sparkline/jquery.sparkline.min.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/sparkline/sparkline.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/maps/vector/assets/lib/jquery-jvectormap-1.2.2.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/modules/admin/maps/vector/assets/lib/maps/jquery-jvectormap-world-mill-en.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/modules/admin/maps/vector/assets/custom/maps-vector.world-map-markers.init.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/core/js/sidebar.main.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/core/js/sidebar.discover.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/core/js/core.init.js?v=v1.0.3-rc2"></script>
+</form>
 
 </html>

@@ -2,15 +2,14 @@
 /* CSS Document */
 
 .tabmargin {
-	width:100%;
+	width: 96.7%;
+	margin-left: 13px;
 }
 .tabContentSec {
-	background:#ed7d31;
+	background:#3695d5;
 	height:30px;
-	width:98.6%;
-	padding:0px 4px;
+	width:100%;
 	color:#fff;
-	cursor: hand;
 	cursor: pointer;
 	margin:0px 0px 0px 0px;
 	border-bottom: solid 1px #bbbaba;
@@ -26,4 +25,19 @@
 	border-top:solid 0px #a2a2a2;
 	font-size: 13px;
 	line-height: 18px;
+}
+
+.dataTbl{
+	border-collapse:collapse;
+	border-right: 2px solid #f8f8f8;
+}
+.dataTbl td{
+	border:solid 1px #fff;
+	padding:4px;
+}
+.dataTbl tr:nth-child(odd){
+	background:#F0F9FF;
+}
+.dataTbl tr:nth-child(even) {
+	background: #DFF5FC;
 }

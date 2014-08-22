@@ -1,30 +1,18 @@
 package com.topspot.common;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class Constants {
-	Properties prop = new Properties();
-
+	private static ResourceBundle resource = null;
 	public Constants() {
-		InputStream input = null;
-		try {
-			input = Constants.class.getClassLoader().getResourceAsStream("./././config.properties");
-			prop.load(input);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+		this.getBundle("config");
+	}
+	public void getBundle(String resourcePath) {
+		if (resource == null) {
+			resource = ResourceBundle.getBundle(resourcePath);
 		}
 	}
 	public String getValue(String propertyName) {
-		return prop.getProperty(propertyName);
+		return resource.getString(propertyName);
 	}
 }

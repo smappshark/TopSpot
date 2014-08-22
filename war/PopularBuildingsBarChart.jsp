@@ -1,48 +1,75 @@
 <%@page import="topspot.BarChartHelper"%>
 <%@page import="topspot.ConnectToCloudSQL"%>
 <%@page import="java.util.*"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html class="sidebar sidebar-discover">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Topspot</title>
-<script type='text/javascript' src='js/jquery-1.2.3.min.js'></script>
-<script type='text/javascript' src='js/menu.js'></script>
-<link rel="stylesheet" href="css/style.css" type="text/css"/>
-<link rel="stylesheet" href="css/style_exp.css" type="text/css"/>
-<!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
-<script type="text/javascript" src="js/ddaccordion.js"></script>
-<link rel="stylesheet" type="text/css" href="tcal.css" />
-	<script type="text/javascript" src="tcal.js"></script> 
-
-<script type="text/javascript">
-//Initialize 2nd demo:
-ddaccordion.init({
-	headerclass: "tabContentSec", //Shared CSS class name of headers group
-	contentclass: "tabContent_data", //Shared CSS class name of contents group
-	revealtype: "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
-	mouseoverdelay: 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
-	collapseprev: false, //Collapse previous content (so only one open at any time)? true/false 
-	defaultexpanded: [0], //index of content(s) open by default [0, 1, etc]. [] denotes no content.
-	onemustopen: false, //Specify whether at least one header should be open always (so never all headers closed)
-	animatedefault: false, //Should contents open by default be animated into view?
-	persiststate: true, //persist state of opened contents within browser session?
-	toggleclass: ["closedlanguage", "openlanguage"], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
-	//togglehtml: ["prefix", "<img src='images/plus.png' style='width:18px; height:18px; float:left; margin-top:6px;' /> ", "<img src='images/minus.png' style='width:18px; height:18px; float:left; margin-top:6px;' />  "], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
-	animatespeed: "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
-	oninit:function(expandedindices){ //custom code to run when headers have initalized
-		//do nothing
-	},
-	onopenclose:function(header, index, state, isuseractivated){ //custom code to run whenever a header is opened or closed
-		//do nothing
+<script src="js/components/library/jquery/jquery.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/library/jquery/jquery-migrate.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/library/modernizr/modernizr.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/less-js/less.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+  <script>
+  function selectedArea(areaName){
+  	$('#area').text("");
+  	$('#area').text(areaName);
+  	$('#hid_Area').val(areaName);
+  }
+  
+  function checkForm() {
+		var datepicker = document.getElementById("datepicker").value;
+		var datepicker1 = document.getElementById("datepicker1").value;
+		document.getElementById("hid_datepicker").value = datepicker;
+		document.getElementById("hid_datepicker1").value = datepicker1;	
 	}
-})
+  
+  </script>
+    
+     <link rel="stylesheet" href="css/admin/module.admin.stylesheet-complete.sidebar_type.discover.min.css"/>
+    
+    <!--dropdown menu-->
+    <link rel="stylesheet" href="css/topspot_style.css"/>
+    <!--<script src="../assets/components/core/js/jquery-1.2.3.min.js"></script>-->
+    <script src="js/components/core/js/menu.js"></script>
+    <!--dropdown menu end-->
+    
+    <!--expand div-->
+    <link rel="stylesheet" href="css/style_exp.css"/>
+    
+    <link rel="stylesheet" type="text/css" href="tcal.css" />
+    <!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+    <script type="text/javascript" src="tcal.js"></script> 
+    <script src="js/components/core/js/ddaccordion.js"></script>
+    <script type="text/javascript">
+	//Initialize:
+	ddaccordion.init({
+		headerclass: "tabContentSec", //Shared CSS class name of headers group
+		contentclass: "tabContent_data", //Shared CSS class name of contents group
+		revealtype: "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
+		mouseoverdelay: 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
+		collapseprev: true, //Collapse previous content (so only one open at any time)? true/false 
+		defaultexpanded: [0], //index of content(s) open by default [0, 1, etc]. [] denotes no content.
+		onemustopen: false, //Specify whether at least one header should be open always (so never all headers closed)
+		animatedefault: false, //Should contents open by default be animated into view?
+		persiststate: true, //persist state of opened contents within browser session?
+		toggleclass: ["closedlanguage", "openlanguage"], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
+		//togglehtml: ["prefix", "<img src='images/plus.png' style='width:18px; height:18px; float:left; margin-top:6px;' /> ", "<img src='images/minus.png' style='width:18px; height:18px; float:left; margin-top:6px;' />  "], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
+		animatespeed: "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
+		oninit:function(expandedindices){ //custom code to run when headers have initalized
+			//do nothing
+		},
+		onopenclose:function(header, index, state, isuseractivated){ //custom code to run whenever a header is opened or closed
+			//do nothing
+		}
+	})
 </script>
 </head>
-
-<body onload="onloadchanges()">
 <%
 String req_Area =null;
 if(request.getParameter("hid_Area") != null)
@@ -83,82 +110,89 @@ Iterator<String> colItrBedRooms =colBedRooms.iterator();
 
 %>
 
-<form action="PopularBuildingsBarChart.jsp" method="post" onsubmit="checkForm();">
-<div class="nav-wrap">
-	<div class="nav">
-    	<ul>
-        	<li><a href="#">Charts</a></li>
-            <li><a href="buildMap.jsp">Maps</a></li>
-            <li><a href="#">Histogram</a></li>
-            <li><a href="#">Scatter Charts</a></li>
-              <li><a href="#">Mash Charts</a></li>
-             <li><a href="signin.jsp">SignIn</a></li>
-        </ul>
-    </div>
-</div>
-<div class="main">
-	<div class="header">
-    	<div class="logo"><img src="images/topspot-logo.png"/></div>
-    </div>
-    <div class="container">
-    	<div class="searchbg">
-        	<table width="100%" >
-            	<tr>
-                	<td>Area</td> <td> From Date</td> <td>To Date</td>
-                </tr>
-                <tr>
-<td nowrap>
-		<select name="sel_Area" id="sel_Area" class="tcal">
-		<%
-			if(req_Area == null || req_Area.equals("null") || req_Area.equals("All") )
-			{
-		%>
-		<option value="All" selected class="tcal">Area</option>
-		<%
-			}
-		else
-		{
-			%>
-			<option value="All" class="tcal">Area</option>
-			<%
-		}
-		while(colAreaItr.hasNext())
-			{
-				String ssA= colAreaItr.next();
-				if(ssA != null && !ssA.equals("NULL") && !ssA.equals("null") && ssA.equals(req_Area))
-				{
-			%>
-			<option value= "<%= ssA %>" selected class="tcal"><%=ssA %></option> 
-			<%
-				}
-			else
-				{
-		%>
-		<option value= "<%= ssA %>" class="tcal"><%=ssA %></option> 
-		<%
-				}
-			}							
-		%>
-</select> 
-	</td>                	
-<td nowrap>
-		<input type="text" id="datepicker" name="date" class="tcal" value="From date">
-	</td>	
-	<td nowrap>
-		<input type="text" id="datepicker1" name="date1" class="tcal"  value="To date">
-	</td>
-	<td align='center' valign='middle'>
-<input type ="submit" value="Show Report" name="B1">
-</td>
-</tr>
-</table>
- </div>
- <input type="hidden" name="hid_Area" id="hid_Area">
+<body class="" onload="onloadchanges()">
+<form action="BuildingPieChart.jsp" method="post">
+
+   <!-- Main Container Fluid -->
+    <div class="container-fluid menu-hidden">
+    <!--  Side Menu -->
+ 		<%@ include file="includes/Menu.jsp" %>
+    <!--  Side Menu -->
+    
+      <!-- Content -->
+        <div id="content">
+          <%@ include file="includes/header.jsp" %>
+            <div class="innerLR">
+                <h2 class="margin-none">Analytics &nbsp;<i class="fa fa-fw fa-pencil text-muted"></i>
+                </h2>
+                <div class="row">
+                    <div class="col-md-8" style="width:100%">
+                        
+                        <div class="subnav">
+                       <ul id="nav">
+				<!--  area start -->
+				<li><a href="#" id="sel_Area">Area</a>
+					<ul>
+						<%
+							if (colAreaItr != null) {
+								while (colAreaItr.hasNext()) {
+									String ssA= colAreaItr.next();
+									if(ssA != null && !ssA.equals("NULL") && !ssA.equals("null") && ssA.equals(req_Area))
+									{
+						%>
+						<li><a href="#" onclick="selectedArea('<%=ssA%>');"><%=ssA%></a></li>
+						<%
+							} else {
+						%>
+						<li><a href="#" onclick="selectedArea('<%=ssA%>');"><%=ssA%></a></li>
+						<%
+							}
+								}
+							}
+						%>
+					</ul></li>
+				 <li><input type="text" id="datepicker" name="date" class="tcal" value="From date"/> </li>
+                                 <li><input type="text" id="datepicker1" name="date1" class="tcal" value="To date"> </li>
+
+				<li><input type ="submit" value="Show Report" name="B1"/> </li>
+                       </ul>
+                        </div>
+                        <!-- //Row -->
+                        <!-- Widget -->
+                        <div class=" widget widget-body-white " style="width:100%; min-height: 578px;">
+                           
+                            <div class="widget-body innerAll">
+                                <!-- Chart with lines and fill with no points -->
+                              <!--  <div id="chart_lines_fill_nopoints_2" class="flotchart-holder"></div>-->
+                                <div class="rightBlock">
+								<div id="barchart" style="width: 900px; height: 500px;"	class="wrapper"></div>
+							</div>
+                            </div>
+                        </div>
+                      
+                       
+                        </div>
+                        <!-- // End Widget -->
+                    
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+        <!-- // Content END -->
+         <div class="clearfix"></div>
+            <!--  Side Menu -->
+    <%@ include file="includes/footer.jsp" %>
+    <!--  Side Menu -->
+        </div>
+   <input type="hidden" name="hid_Area" id="hid_Area">
 <input type="hidden" name="hid_SubArea" id="hid_SubArea">
 <input type="hidden" name="hid_datepicker" id="hid_datepicker">
 <input type="hidden" name="hid_datepicker1" id="hid_datepicker1">
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script Language="JavaScript">
+
+
 function onloadchanges()
 {
 	var pickvalue;
@@ -254,46 +288,53 @@ var options = {
   	bar: { groupWidth: '75%' },
           isStacked: true,
         };
-	var chart = new google.visualization.BarChart(document.getElementById('piechart'));
+	var chart = new google.visualization.BarChart(document.getElementById('barchart'));
     chart.draw(data, options);
 	  }
-function checkForm() {
-    	
-		var sb1 = document.getElementById("sel_Area");
-		var strselArea = sb1.options[sb1.selectedIndex].value;
-		document.getElementById("hid_Area").value =strselArea; 
-		
-	/*	var sb2 = document.getElementById("sel_SubArea");
-		var strselSubArea = sb2.options[sb2.selectedIndex].value;
-		document.getElementById("hid_SubArea").value =strselSubArea; */
-		var datepicker = document.getElementById("datepicker").value;
-		var datepicker1 = document.getElementById("datepicker1").value;
-		document.getElementById("hid_datepicker").value = datepicker;
-		document.getElementById("hid_datepicker1").value = datepicker1;	
-	}
+
     </script>
-            
-       
-        <div class="leftBlock">
-        	<ul>
-        		<li><a href="BuildingPieChart.jsp">Pie Charts by count</a></li>
-            	<li><a href="BuildingByValuePieChart.jsp">Pie Charts by value</a></li>
-                <li><a href="PopularBuildingsBarChart.jsp">Bar Charts</a></li>
-                <li><a href="LineChart.jsp">Line Charts</a></li>
-                <li><a href="BuildingScatterChart.jsp">Scatter Charts</a></li>
-            </ul>
-        </div>
-        <div class="rightBlock">
-		<div id="piechart" style="width: 900px; height: 500px;" class="wrapper"></div>
-		</div>
-    </div>
-</div> <!--main end-->
-<div class="footer-wrap">
-	<div class="footer">
-    	<p style="color:#e51737; padding:5px;">For Sale,  For Rent,  For Investment,  For Advise  </p>
-        <p style="color:#052f6e;">Call Top Spot   Tel: +971 4 430 6228 / Fax: +971 4 430 6229   info@topspot.ae  /  Visit us at Regal Tower,  Business Bay,  Dubai,  United Arab Emirates</p>
-    </div>
-</div>
-</form>
+
+        
+         <!-- Global -->
+   	 <script data-id="App.Config">
+	    var App = {};
+	    var basePath = '',
+	        commonPath = 'js',
+	        rootPath = '/',
+	        DEV = false,
+	        componentsPath = 'js/components/';
+	    var primaryColor = '#3695d5',
+	        dangerColor = '#b55151',
+	        successColor = '#609450',
+	        infoColor = '#4a8bc2',
+	        warningColor = '#ab7a4b',
+	        inverseColor = '#45484d';
+	    var themerPrimaryColor = primaryColor;
+    </script>
+    	
+    <script src="js/components/library/bootstrap/js/bootstrap.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/nicescroll/jquery.nicescroll.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/breakpoints/breakpoints.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/preload/pace/pace.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/plugins/preload/pace/preload.pace.init.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/core/js/animations.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/jquery.flot.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/jquery.flot.resize.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/lib/plugins/jquery.flot.tooltip.min.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotcharts.common.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotchart-line-2.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotchart-mixed-1.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/flot/assets/custom/js/flotchart-bars-horizontal.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/easy-pie/assets/lib/js/jquery.easy-pie-chart.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/easy-pie/assets/custom/easy-pie.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/sparkline/jquery.sparkline.min.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/charts/sparkline/sparkline.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/modules/admin/maps/vector/assets/lib/jquery-jvectormap-1.2.2.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/modules/admin/maps/vector/assets/lib/maps/jquery-jvectormap-world-mill-en.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/modules/admin/maps/vector/assets/custom/maps-vector.world-map-markers.init.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script src="js/components/core/js/sidebar.main.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/core/js/sidebar.discover.init.js?v=v1.0.3-rc2"></script>
+    <script src="js/components/core/js/core.init.js?v=v1.0.3-rc2"></script>
+    </form>
 </body>
 </html>
