@@ -35,8 +35,7 @@ public class ConnectionUtil {
         Connection connection = null;
         String URL = null;
         try {
-        	URL = objConstants.getValue("DBUrl") + objConstants.getValue("DBName") + "?user=" + objConstants.getValue("DBUserName");
-        	//URL = objConstants.getValue("DBUrl") + objConstants.getValue("DBName") + "?user=" + objConstants.getValue("DBUserName")+ "&password=" + objConstants.getValue("DBPassword");
+        	URL = objConstants.getValue("DBUrl");
         	log.info("DB URL: " + URL);
             connection = DriverManager.getConnection(URL);
         } catch (SQLException e) {
