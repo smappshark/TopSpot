@@ -227,3 +227,16 @@ table.investor_tbl tr:nth-child(even){
     padding: 100px 200px 0 200px;
     position:absolute;
 }
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #000;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #000;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #000;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #000;
+}

@@ -1,12 +1,6 @@
 <%@page import="topspot.ConnectToCloudSQL"%>
 <%@page import="topspot.BuildingTrendDetails"%>
 <%@page import="java.util.*"%>
-<%@ page import="java.util.List"%>
-<%@ page import="java.sql.*"%>
-<%@page import="topspot.ValuePieChartHelper"%>
-<%@page import="topspot.TopspotBean"%>
-<%@ page import="com.topspot.common.Constants" %>
-<%@ page import="com.topspot.ConnectionUtil" %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -14,7 +8,7 @@
 <html class="sidebar sidebar-discover">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Topspot</title>
 <script src="js/components/library/jquery/jquery.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/library/jquery/jquery-migrate.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/library/modernizr/modernizr.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
@@ -22,25 +16,39 @@
     <script src="js/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v1.0.3-rc2"></script>
     <script src="js/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script>
-    
+    var buildingArray = new Array();
     function selectedBuildingOne(selectedBuidling){
     	$('#buildingOne').text("");
-    	$('#buildingOne').text(selectedBuidling);
-    	$('#hid_Building1').val(selectedBuidling);
+    	$('#buildingOne').text(selectedBuidling.trim());
+    	$('#hid_Building1').val(selectedBuidling.trim());
     }
     
     function selectedBuildingTwo(selectedBuidling){
     	$('#buildingTwo').text("");
-    	$('#buildingTwo').text(selectedBuidling);
-    	$('#hid_Building2').val(selectedBuidling);
+    	$('#buildingTwo').text(selectedBuidling.trim());
+    	$('#hid_Building2').val(selectedBuidling.trim());
     }
 
     function selectedBuildingThree(selectedBuidling){
     	$('#buildingThree').text("");
-    	$('#buildingThree').text(selectedBuidling);
-    	$('#hid_Building3').val(selectedBuidling);
+    	$('#buildingThree').text(selectedBuidling.trim());
+    	$('#hid_Building3').val(selectedBuidling.trim());
     }
-
+    
+    function selectedBuildingFour(selectedBuidling){
+    	$('#buildingFour').text("");
+    	$('#buildingFour').text(selectedBuidling.trim());
+    	$('#hid_Building4').val(selectedBuidling.trim());
+    }
+    
+    function selectedBuildingFive(selectedBuidling){
+    	$('#buildingFive').text("");
+    	$('#buildingFive').text(selectedBuidling.trim());
+    	$('#hid_Building5').val(selectedBuidling.trim());
+    }
+    
+    
+   
     if ( /*@cc_on!@*/ false && document.documentMode === 10)
     {
         document.documentElement.className += ' ie ie10';
@@ -48,7 +56,7 @@
     </script>
     
      <link rel="stylesheet" href="css/admin/module.admin.stylesheet-complete.sidebar_type.discover.min.css"/>
-    
+        <link rel="stylesheet" type="text/css" href="css/dropdown_scrollbar.css" />
     <!--dropdown menu-->
     <link rel="stylesheet" href="css/topspot_style.css"/>
     <!--<script src="../assets/components/core/js/jquery-1.2.3.min.js"></script>-->
@@ -61,30 +69,9 @@
     <link rel="stylesheet" type="text/css" href="tcal.css" />
     <!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
     <script type="text/javascript" src="tcal.js"></script> 
+     <script type="text/javascript" src="js/index.js"></script> 
     <script src="js/components/core/js/ddaccordion.js"></script>
-    <script type="text/javascript">
-	//Initialize:
-	ddaccordion.init({
-		headerclass: "tabContentSec", //Shared CSS class name of headers group
-		contentclass: "tabContent_data", //Shared CSS class name of contents group
-		revealtype: "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
-		mouseoverdelay: 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
-		collapseprev: true, //Collapse previous content (so only one open at any time)? true/false 
-		defaultexpanded: [0], //index of content(s) open by default [0, 1, etc]. [] denotes no content.
-		onemustopen: false, //Specify whether at least one header should be open always (so never all headers closed)
-		animatedefault: false, //Should contents open by default be animated into view?
-		persiststate: true, //persist state of opened contents within browser session?
-		toggleclass: ["closedlanguage", "openlanguage"], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
-		//togglehtml: ["prefix", "<img src='images/plus.png' style='width:18px; height:18px; float:left; margin-top:6px;' /> ", "<img src='images/minus.png' style='width:18px; height:18px; float:left; margin-top:6px;' />  "], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
-		animatespeed: "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
-		oninit:function(expandedindices){ //custom code to run when headers have initalized
-			//do nothing
-		},
-		onopenclose:function(header, index, state, isuseractivated){ //custom code to run whenever a header is opened or closed
-			//do nothing
-		}
-	})
-</script>
+   
 </head>
 <%
 
@@ -92,16 +79,27 @@ String DBName = null;
 String url = null;
 
 String req_Building1 =null;
-if(request.getParameter("hid_Building1") != null)
-req_Building1=request.getParameter("hid_Building1");
+if(request.getParameter("hid_Building1") != null){
+req_Building1=request.getParameter("hid_Building1").trim();
+}
 
 String req_Building2 =null;
 if(request.getParameter("hid_Building2") != null)
-req_Building2=request.getParameter("hid_Building2");
+req_Building2=request.getParameter("hid_Building2").trim();
 
 String req_Building3 =null;
 if(request.getParameter("hid_Building3") != null)
-req_Building3=request.getParameter("hid_Building3");
+req_Building3=request.getParameter("hid_Building3").trim();
+
+String req_Building4 =null;
+if(request.getParameter("hid_Building4") != null)
+	req_Building4=request.getParameter("hid_Building4").trim();
+
+String req_Building5 =null;
+if(request.getParameter("hid_Building5") != null)
+	req_Building5=request.getParameter("hid_Building5").trim();
+
+
 
 String req_datepicker =null;
 if(request.getParameter("hid_datepicker") != null  && !request.getParameter("hid_datepicker").equals("From date") && request.getParameter("hid_datepicker")!="")
@@ -114,15 +112,9 @@ req_datepicker1=request.getParameter("hid_datepicker1");
 ArrayList<Integer> colpersqftFrom=new ArrayList<Integer>();
 ArrayList<Integer> colpersqftTo=new ArrayList<Integer>();
 ConnectToCloudSQL objConnectToCloudSQL = new ConnectToCloudSQL();
-ArrayList<String> colBuild =objConnectToCloudSQL.getConnection();
-Iterator<String> colItr1=colBuild.iterator();
-Iterator<String> colItr2=colBuild.iterator();
-Iterator<String> colItr3=colBuild.iterator();
 
-//Iterator<String> colAreaItr=objConnectToCloudSQL.colArea.iterator();
-//Iterator<String> colSubAreaItr=objConnectToCloudSQL.colSubArea.iterator();
 
-List<BuildingTrendDetails> colBuildingTrendDetails=objConnectToCloudSQL.getLineChartData(req_Building1,req_Building2,req_Building3,req_datepicker,req_datepicker1);
+List<BuildingTrendDetails> colBuildingTrendDetails=objConnectToCloudSQL.getLineChartData(req_Building1,req_Building2,req_Building3,req_Building4,req_Building5,req_datepicker,req_datepicker1);
 String buildin1From = objConnectToCloudSQL.buildin1From;
 String buildin1To = objConnectToCloudSQL.buildin1To;
 String buildin2From = objConnectToCloudSQL.buildin2From;
@@ -189,81 +181,73 @@ if(colreps != null && colreps.size()>0)
                         
                         <div class="subnav">
                             <ul id="nav">
-                                <li><a href="#" id="buildingOne">Building 1</a>
-                                    <ul>
-                                    <%
-										if(colItr1!=null)
-										{
-										while(colItr1.hasNext())
-											{
-												String ss1= colItr1.next();
-												if(ss1 != null && !ss1.equals("NULL") && !ss1.equals("null") && ss1.equals(req_Building1))
-												{
-										%>
-                                        <li><a href="#" onclick="selectedBuildingOne('<%= ss1 %>');"><%= ss1 %></a></li>
-                                 <%
-											}
-										else
-											{
-									%>
-									 <li><a href="#" onclick="selectedBuildingOne('<%= ss1 %>');"><%= ss1 %></a></li>
-												<%
-											}
-										}
-									}
-									%>
-                                    </ul>
-                                </li>
-                                <li><a href="#" id="buildingTwo">Building 2</a>
-                                    <ul>
-            <%                           if(colItr2!=null)
-		{
-		while(colItr2.hasNext())
-			{
-				String ssSubA= colItr2.next();
-				if(ssSubA != null && !ssSubA.equals("NULL") && !ssSubA.equals("null") && ssSubA.equals(req_Building2))
-				{
-			%>
-                                        <li><a href="#" onclick="selectedBuildingTwo('  <%=ssSubA %>  ');"><%= ssSubA %></a></li>
-                                        <%
-				}
-			else
-				{
-		%>
-		<li><a href="#" onclick="selectedBuildingTwo('  <%=ssSubA %>  ');"><%=ssSubA %></a> </li>
-		<%
-				}
-			}	
-		}
-		%>
-                                    </ul>
-                                </li>
-                                
-                                <li><a href="#" id="buildingThree" >Building 3</a>
-                                    <ul>
-                                    <%
-				if(colItr3!=null)
-		{
-		while(colItr3.hasNext())
-			{
-				String sb3= colItr3.next();
-				if(sb3 != null && !sb3.equals("NULL") && !sb3.equals("null") && sb3.equals(req_Building3))
-				{
-			%>
-                                        <li><a href="#" onclick="selectedBuildingThree(' <%=sb3 %> ');"><%=sb3 %></a></li>
-                                  <%
-				}
-			else
-				{
-		%>
-		<li><a href="#" onclick="selectedBuildingThree(' <%=sb3 %> ');"><%=sb3 %></a> </li>
-		<%
-				}
-			}	
-		}
-		%>
-                                    </ul>
-                                </li>
+                               <%
+								if(req_Building1 != null && req_Building1 != "") {
+							%>
+									<li><a href="#" id="buildingOne"><%=req_Building1%></a> <%
+ 								} else {
+							%>
+								<li><a href="#" id="buildingOne">Building 1</a> <%
+						 		}
+							 %>
+						 		<ul id="dynamicBuildingLi1"  class="scrollbar">
+								</ul>
+						    </li>
+						      <%
+								if(req_Building2 != null && req_Building2 != "") {
+							%>
+									<li><a href="#" id="buildingTwo"><%=req_Building2%></a> <%
+ 								} else {
+							%>
+								<li><a href="#" id="buildingTwo">Building 2</a> <%
+						 		}
+							 %>
+								<ul id="dynamicBuildingLi2"  class="scrollbar">
+								</ul>
+							</li>	
+						
+							 						      <%
+								if(req_Building3 != null && req_Building3 != "") {
+							%>
+									<li><a href="#" id="buildingThree"><%=req_Building3%></a> <%
+ 								} else {
+							%>
+								<li><a href="#" id="buildingThree">Building 3</a> <%
+						 		}
+							 %>
+							 
+								<ul id="dynamicBuildingLi3"  class="scrollbar">
+								</ul>
+							</li>
+							
+							  <%
+								if(req_Building4 != null && req_Building4 != "") {
+							%>
+									<li><a href="#" id="buildingFour"><%=req_Building4%></a> <%
+ 								} else {
+							%>
+								<li><a href="#" id="buildingFour">Building 4</a> <%
+						 		}
+							 %>
+							 
+								<ul id="dynamicBuildingLi4"  class="scrollbar">
+								</ul>
+							</li>
+							
+							  <%
+								if(req_Building5 != null && req_Building5 != "") {
+							%>
+									<li><a href="#" id="buildingFive"><%=req_Building5%></a> <%
+ 								} else {
+							%>
+								<li><a href="#" id="buildingFive">Building 5</a> <%
+						 		}
+							 %>
+							 
+								<ul id="dynamicBuildingLi5"  class="scrollbar">
+								</ul>
+							</li>
+							
                                 <li><input type="text" id="datepicker" name="date" class="tcal" value="From date"/> </li>
                                  <li><input type="text" id="datepicker1" name="date1" class="tcal" value="To date"> </li>
                                  <li><input type ="submit" value="Show Report" name="B1"/> </li>
@@ -283,7 +267,7 @@ if(colreps != null && colreps.size()>0)
                             <div class="widget-body innerAll">
                                 <!-- Chart with lines and fill with no points -->
                               <!--  <div id="chart_lines_fill_nopoints_2" class="flotchart-holder"></div>-->
-                                <div class="rightBlock">
+                                <div class="rightBlock" style="margin-top: 40px;">
 								<div id="linechart" style="width: 600px; height: 400px;" class="wrapper"></div>
 							</div>
                             </div>
@@ -304,11 +288,13 @@ if(colreps != null && colreps.size()>0)
     <%@ include file="includes/footer.jsp" %>
     <!--  Side Menu -->
        
-     <input type="hidden" name="hid_Building1" id="hid_Building1">
-<input type="hidden" name="hid_Building2" id="hid_Building2">
-<input type="hidden" name="hid_Building3" id="hid_Building3">
-<input type="hidden" name="hid_datepicker" id="hid_datepicker">
-<input type="hidden" name="hid_datepicker1" id="hid_datepicker1">
+     <input type="hidden" name="hid_Building1" id="hid_Building1" value="<%=req_Building1%>">
+<input type="hidden" name="hid_Building2" id="hid_Building2" value="<%=req_Building2%>">
+<input type="hidden" name="hid_Building3" id="hid_Building3" value="<%=req_Building3%>">
+<input type="hidden" name="hid_Building4" id="hid_Building4" value="<%=req_Building4%>">
+<input type="hidden" name="hid_Building5" id="hid_Building5" value="<%=req_Building5%>">
+<input type="hidden" name="hid_datepicker" id="hid_datepicker" value="<%=req_datepicker%>">
+<input type="hidden" name="hid_datepicker1" id="hid_datepicker1" value="<%=req_datepicker1%>">
          <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script Language="JavaScript">
 var jsArr = new Array();  

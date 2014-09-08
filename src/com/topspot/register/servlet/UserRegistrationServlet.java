@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -137,8 +138,6 @@ public class UserRegistrationServlet extends HttpServlet {
 				 
 			} catch (Exception e) {
 				e.printStackTrace();
-			}finally {
-				ConnectionUtil.closeConnection(conn);
 			}
 		 }
 	}
@@ -231,6 +230,7 @@ public class UserRegistrationServlet extends HttpServlet {
 
 					long start_time = System.currentTimeMillis();
 					String userSession = String.valueOf(start_time);
+					System.out.println("userSession- "+userSession);
 					userSession = userId + "_" + userSession;
 					String created = sqlTimestamp.toString();
 					String lastUpDated = sqlTimestamp.toString();
@@ -240,8 +240,6 @@ public class UserRegistrationServlet extends HttpServlet {
 						ConnectionUtil.executeQuery(insertQuery);
 					} catch (Exception e) {
 						e.printStackTrace();
-					}finally {
-						ConnectionUtil.closeConnection(conn);
 					}
 					StringBuffer url = request.getRequestURL();
 					String	path = url.substring(0, url.indexOf("registrationServlet"));
@@ -281,8 +279,6 @@ public class UserRegistrationServlet extends HttpServlet {
 				request.setAttribute("userMsg", strUserMsg);
 				reqDisp.forward(request, response);
 
-			}finally {
-				ConnectionUtil.closeConnection(conn);
 			}
 		}
 
@@ -293,7 +289,7 @@ public class UserRegistrationServlet extends HttpServlet {
 		    String userId = request.getParameter("userId");
 		    String password = request.getParameter("password");
 		    String userType = request.getParameter("userType");
-		 
+		    HttpSession session = request.getSession();
 		    Connection conn=null;
 			 try {
 				 String query = "select u.id,u.login_name,u.email_id,u.user_type,u.status,u.password from users u where u.email_id='"+ userId + "' OR login_name='"+ userId + "'";
@@ -304,10 +300,12 @@ public class UserRegistrationServlet extends HttpServlet {
 				 boolean isExists = rs.next();
 				 
 				 if(!isExists){
+					 session.setAttribute("isUserLoogedIn", false);
 					 response.sendRedirect("signin.jsp?message="+"Sorry, you are not a registered user! Please sign up.");
 				 }
 				if(isExists){
-				 usr.setId( rs.getInt(1));
+			
+			     usr.setId( rs.getInt(1));
 				 usr.setLoginName(rs.getString("u.login_name"));
 				 usr.setEmailId(rs.getString("u.email_id"));
 				 usr.setUserType(rs.getString("u.user_type"));
@@ -336,20 +334,31 @@ public class UserRegistrationServlet extends HttpServlet {
 										 response.sendRedirect("agentLogged.jsp");
 									 }*/
 									 
+									//commented by gopal on 25-08-2014
+									//if(StringUtils.equals("admin",usr.getUserType())) response.sendRedirect("admin.jsp");
+									//else if(StringUtils.equals("investor",usr.getUserType())) response.sendRedirect("investorFactSheet.jsp");
+									
+									//added by gopal on 25-08-2014
+									
+									 session.setAttribute("isUserLoogedIn", true);
+									 session.setAttribute("userName", usr.getLoginName());
+									 
 									if(StringUtils.equals("admin",usr.getUserType())) response.sendRedirect("admin.jsp");
-									else if(StringUtils.equals("investor",usr.getUserType())) response.sendRedirect("investorFactSheet.jsp");
+									else if(StringUtils.equals("investor",usr.getUserType())) response.sendRedirect("index.jsp");
 									else response.sendRedirect("pageUnderConstruction.jsp");
 								}else{
-									
+									session.setAttribute("isUserLoogedIn", false);
 									if(StringUtils.equalsIgnoreCase("pending", usr.getStatus())){
 										// registration pending
 										 response.sendRedirect("signin.jsp?message="+"Your registration is still pending,need admin approval.");
 									}
 								} 
 						  }else{
+							  session.setAttribute("isUserLoogedIn", false);
 							  response.sendRedirect("signin.jsp?message="+"Invalid user type."); 
 						  }
 						 }else{
+							 session.setAttribute("isUserLoogedIn", false);
 							 // Invalid user
 							 response.sendRedirect("signin.jsp?message="+"Invalid user name or password.");
 						 }
@@ -358,14 +367,13 @@ public class UserRegistrationServlet extends HttpServlet {
 					 
 				 }else{
 					 if(StringUtils.isEmpty(usr.getPassword())){
+						 session.setAttribute("isUserLoogedIn", false);
 						 response.sendRedirect("signin.jsp?message="+"A link sent to your email to set your password.");
 					 }
 				 }
 			 }
 		}catch(Exception e){
 			e.printStackTrace();
-		}finally {
-			ConnectionUtil.closeConnection(conn);
 		}
 		
 	}

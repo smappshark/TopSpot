@@ -1,12 +1,4 @@
-<%@page import="topspot.ConnectToCloudSQL"%>
-<%@page import="topspot.BuildingTrendDetails"%>
 <%@page import="java.util.*"%>
-<%@ page import="java.util.List"%>
-<%@ page import="java.sql.*"%>
-<%@page import="topspot.ValuePieChartHelper"%>
-<%@page import="topspot.TopspotBean"%>
-<%@ page import="com.topspot.common.Constants" %>
-<%@ page import="com.topspot.ConnectionUtil" %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -52,33 +44,58 @@
 }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Topspot</title>
 <script src="js/components/library/jquery/jquery.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/library/jquery/jquery-migrate.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/library/modernizr/modernizr.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/plugins/less-js/less.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v1.0.3-rc2"></script>
     <script src="js/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+       
+    <script type='text/javascript' src='js/growthreturnmatrix.js'></script>
     <script>
-    
-    function selectedBuildingOne(selectedBuidling){
-    	$('#buildingOne').text("");
-    	$('#buildingOne').text(selectedBuidling);
-    	$('#hid_Building1').val(selectedBuidling);
-    }
-    
-    function selectedBuildingTwo(selectedBuidling){
-    	$('#buildingTwo').text("");
-    	$('#buildingTwo').text(selectedBuidling);
-    	$('#hid_Building2').val(selectedBuidling);
-    }
 
-    function selectedBuildingThree(selectedBuidling){
-    	$('#buildingThree').text("");
-    	$('#buildingThree').text(selectedBuidling);
-    	$('#hid_Building3').val(selectedBuidling);
+    function BindChart(price, tableID) {
+		var tbl = document.getElementById(tableID);
+		var rowCount = tbl.rows.length;
+		for (var rw = 2; rw < rowCount; rw++) {
+			var cellCount = tbl.rows[rw].cells.length;
+			for (var cl = 1; cl < cellCount; cl++) {
+				if ((rw + 2) > cl) {
+					var divisor = (0.01 * (rw + 2));
+					var multiplier = (1 + parseFloat("0.0" + cl, 10));
+					tbl.rows[rw].cells[cl].innerHTML = ((price * multiplier)/divisor).toFixed(2);
+				} else {
+					tbl.rows[rw].cells[cl].innerHTML = "";
+				}
+			}
+		}
+	}
+    
+    function selectedBuildings(selectedBuilding){
+		jQuery("#dataContainer").hide();
+		jQuery(".loader").show();
+		jQuery("#buildings").text(selectedBuilding);
+		var $building = selectedBuilding;
+		jQuery.get('ActionServlet', {
+			serviceName : "getGrowthReturnMatrixReport",
+			buildingName : $building
+		}, function(responseJson) {
+			jQuery("#dataContainer").show();
+			jQuery(".loader").hide();
+			
+			
+			if (responseJson && responseJson.constructor === Array && responseJson.length > 0) {
+				if (Object.keys(responseJson[0]).length > 0) {
+					var avgRent = responseJson[0].avgRent;
+					if (avgRent) {
+						BindChart(avgRent, "tblLongTerm");
+						BindChart(avgRent, "tblShortTerm");
+					}
+				}
+			}
+		});
     }
-
     if ( /*@cc_on!@*/ false && document.documentMode === 10)
     {
         document.documentElement.className += ' ie ie10';
@@ -92,7 +109,7 @@
     <!--<script src="../assets/components/core/js/jquery-1.2.3.min.js"></script>-->
     <script src="js/components/core/js/menu.js"></script>
     <!--dropdown menu end-->
-    
+     <link rel="stylesheet" type="text/css" href="css/dropdown_scrollbar.css" />
     <!--expand div-->
     <link rel="stylesheet" href="css/style_exp.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -101,30 +118,7 @@
     <script type="text/javascript" src="tcal.js"></script> 
     <script src="js/components/core/js/ddaccordion.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-       <script type="text/javascript">
-        //Initialize 2nd demo:
-        ddaccordion.init({
-            headerclass : "tabContentSec", //Shared CSS class name of headers group
-            contentclass : "tabContent_data", //Shared CSS class name of contents group
-            revealtype : "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
-            mouseoverdelay : 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
-            collapseprev : false, //Collapse previous content (so only one open at any time)? true/false 
-            defaultexpanded : [ 0 ], //index of content(s) open by default [0, 1, etc]. [] denotes no content.
-            onemustopen : false, //Specify whether at least one header should be open always (so never all headers closed)
-            animatedefault : false, //Should contents open by default be animated into view?
-            persiststate : true, //persist state of opened contents within browser session?
-            toggleclass : [ "closedlanguage", "openlanguage" ], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
-            //togglehtml: ["prefix", "<img src='images/plus.png' style='width:18px; height:18px; float:left; margin-top:6px;' /> ", "<img src='images/minus.png' style='width:18px; height:18px; float:left; margin-top:6px;' />  "], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
-            animatespeed : "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
-            oninit : function(expandedindices) { //custom code to run when headers have initalized
-                //do nothing
-            },
-            onopenclose : function(header, index, state, isuseractivated) { //custom code to run whenever a header is opened or closed
-                //do nothing
-            }
-        })
-    </script>
-    <script type='text/javascript' src='js/growthreturnmatrix.js'></script>
+ 
 </head>
 
 
@@ -144,9 +138,13 @@
                 <div class="row">
                     <div class="col-md-8" style="width:100%">
                          <div class="subnav">
-                            <ul id="nav">
-                                <li><select id="ddBuildings"></select></li>
-                                </ul>
+                     
+                                 <ul id="nav">
+                           		 <li><a href="#" id="buildings">Select Building</a>
+			                            <ul id="dynamicBuildingLi"  class="scrollbar">
+			                            </ul>
+			                         </li>
+		                          </ul>
                        </div>
                         <!-- Widget -->
                         <div class=" widget widget-body-white " style="width:100%; min-height: 578px;">
@@ -258,7 +256,7 @@
     <%@ include file="includes/footer.jsp" %>
     <!--  Side Menu -->
        
-
+<input type="hidden" name="ddBuildings" id="ddBuildings">
         
         
          <!-- Global -->

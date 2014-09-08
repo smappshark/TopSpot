@@ -1,0 +1,215 @@
+#dynamicBuildingTypeLi::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingTypeLi::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingTypeLi::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingTypeLi::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingTypeLi::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+
+
+
+#dynamicAreaLi::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicAreaLi::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicAreaLi::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicAreaLi::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicAreaLi::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+#dynamicBuildingLi::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingLi::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingLi::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingLi::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingLi::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+
+#dynamicBedroomLi::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBedroomLi::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBedroomLi::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBedroomLi::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBedroomLi::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+
+#dynamicBuildingLi1::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingLi1::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingLi1::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingLi1::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingLi1::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+#dynamicBuildingLi2::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingLi2::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingLi2::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingLi2::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingLi2::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+#dynamicBuildingLi3::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingLi3::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingLi3::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingLi3::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingLi3::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+
+
+#dynamicBuildingLi4::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingLi4::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingLi4::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingLi4::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingLi4::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}
+
+
+
+#dynamicBuildingLi5::-webkit-scrollbar{
+width:8px;
+background-color:#d2d2d1;
+border-radius: 5px;
+} 
+#dynamicBuildingLi5::-webkit-scrollbar-thumb{
+background-color:#aeaead;
+border-radius:10px;
+}
+#dynamicBuildingLi5::-webkit-scrollbar-thumb:hover{
+background-color:#9c9c9b;
+/*border:1px solid #333333;*/
+}
+#dynamicBuildingLi5::-webkit-scrollbar-thumb:active{
+background-color:#80807f;
+/*border:1px solid #333333;*/
+} 
+#dynamicBuildingLi5::-webkit-scrollbar-track{
+/*border:1px gray solid;
+-webkit-box-shadow:0 0 6px gray inset;*/
+border-radius:10px;
+}

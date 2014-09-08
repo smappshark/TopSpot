@@ -13362,7 +13362,7 @@ ul.social-comments li .user-info abbr {
 }
 
 .sidebar.sidebar-discover #menu>div>ul>li>a>span {
-	position: absolute;
+	position: initial;
 	left: 50px
 }
 

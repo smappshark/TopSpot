@@ -1,12 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
      <!-- // START navbar -->
   <nav class="navbar hidden-print main " role="navigation">
                 <div class="navbar-header pull-left">
@@ -63,17 +54,17 @@
                     <li class="dropdown username">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="topspot_images/people/35/2.jpg" class="img-circle"
-                            width="30" />Bill Jonson
+                            width="30" /><%=session.getAttribute("userName") %>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="my_account.html?lang=en" class="glyphicons user"><i></i> Account</a>
+                            <li><a href="#" class="glyphicons user"><i></i> Account</a>
                             </li>
-                            <li><a href="messages.html?lang=en" class="glyphicons envelope"><i></i>Messages</a>
+                            <li><a href="#" class="glyphicons envelope"><i></i>Messages</a>
                             </li>
-                            <li><a href="index.html?lang=en" class="glyphicons settings"><i></i>Settings</a>
+                            <li><a href="#" class="glyphicons settings"><i></i>Settings</a>
                             </li>
-                            <li><a href="signin.jsp" class="glyphicons lock no-ajaxify"><i></i>Logout</a>
+                            <li><a href="signin.jsp" class="glyphicons lock no-ajaxify" onclick ="signout();"><i></i>Logout</a>
                             </li>
                         </ul>
                     </li>
@@ -83,5 +74,3 @@
                 </div>
             </nav>
             <!-- // END navbar -->
-</body>
-</html>

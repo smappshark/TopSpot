@@ -98,6 +98,9 @@ public class Building {
 	@Column(name="Price_AED")
 	private String Price_AED;
 	
+	@Column(name="Price_sqft")
+	private String Price_sqft;
+	
 	public Building(){}
 	
 	public Long getId() {
@@ -265,5 +268,12 @@ public class Building {
 	}
 	public String getPrice_AED() {
 		return this.Price_AED;
+	}
+	
+	public void setPrice_sqft(String price) {
+		this.Price_sqft = price;
+	}
+	public String getPrice_sqft() {
+		return this.Price_sqft;
 	}
 }

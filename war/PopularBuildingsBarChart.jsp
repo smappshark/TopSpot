@@ -15,10 +15,107 @@
     <script src="js/components/plugins/less-js/less.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v1.0.3-rc2"></script>
     <script src="js/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script>
+  
+  var jsArr = new Array();  
+//Load the Visualization API and the piechart package.
+  google.load('visualization', '1', {'packages':['corechart']});
+
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.setOnLoadCallback(drawChart);
+  
+  function drawChart(){
+	  var datepicker = document.getElementById("datepicker").value;
+		var datepicker1 = document.getElementById("datepicker1").value;
+		var req_Area = document.getElementById("hid_Area").value;
+		var req_SubArea = document.getElementById("hid_SubArea").value;
+
+		jQuery.get('ActionServlet', {
+		  req_Area: req_Area,
+		  req_SubArea: req_SubArea,
+		  datepicker: datepicker,
+		  datepicker1: datepicker1,
+	      serviceName: "getBarChartData",
+	    }, function(responseJson) {
+	       
+	    	if (responseJson && responseJson.constructor === Array && responseJson.length > 0) {
+	    	
+	          var data = new google.visualization.DataTable();
+	          
+	          data.addColumn('string', 'Transaction Date');
+	          console.log("responseJson[responseJson.length].buildinRoomTypeList - "+responseJson[responseJson.length - 1].buildinRoomTypeList);
+	          console.log("responseJson[responseJson.length].buildingList - "+responseJson[responseJson.length - 1].buildingListLength);
+	          
+				var buildinRoomTypeList = responseJson[responseJson.length  - 1].buildinRoomTypeList;
+				var buildingListLength = responseJson[responseJson.length  - 1].buildingListLength;
+				 console.log("buildinRoomTypeList.length - "+buildinRoomTypeList.length);
+				 console.log("buildingList.length - "+buildingListLength);
+				 
+				for ( var i = 0; i < buildinRoomTypeList.length; i++) {
+					  console.log("buildinRoomTypeList[i] - "+buildinRoomTypeList[i]);
+			       		   data.addColumn('number', buildinRoomTypeList[i]); 
+			      }
+		      	
+	          data.addRows(parseInt(buildingListLength));
+	          
+	          for  (var i = 0,j = 0; i < responseJson.length; i++){
+	        		var buildingName = responseJson[i].buildingName;
+	        		var roomType = parseInt(responseJson[i].roomType);
+	        		var noOfBedroomsAvaialable = responseJson[i].noOfBedroomsAvaialable;
+        			console.log("j	 - "+j);
+					console.log("roomType - "+roomType);	
+					
+					//if loop to eliminate com type and add 9
+					if(isNaN(roomType)){
+						roomType = 9;
+					}
+					
+					//if loop to add building name in  first location whch means froist row of graph
+	        		if(roomType == 0){ //to add buidling name
+	        			
+	        			if(i !=0){
+	        				j++;
+	        			}
+	        			data.setCell(j,roomType,buildingName);
+	        			
+	        		}
+	        		//increment it because of adding building name in first location
+	        		roomType = roomType + 1;
+	        		
+					/* //if building changes increment j index ex 0,1,23... and so on
+	        		if(isFlag && i != 0){
+	        			j++;
+	        		} */
+	        		
+	        		data.setCell(j,roomType,noOfBedroomsAvaialable); //to add no of bedrooms per room type
+	        		
+	        		
+	        		console.log("buildingName - "+buildingName);
+	        		console.log("noOfBedroomsAvaialable - "+noOfBedroomsAvaialable);
+	        	}
+	          
+	          var options = {
+	                  title: "Top 10 Buildings on Bedrooms vide",
+	                  width: 600,
+	                  height: 400,
+	                  legend: { position: 'right', maxLines: 8 },
+	          	bar: { groupWidth: '75%' },
+	                  isStacked: true,
+	                };
+	        	var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+	            chart.draw(data, options);
+	         }
+	        	 
+	       
+
+	    });
+	  return false;
+	  
+  }
   function selectedArea(areaName){
-  	$('#area').text("");
-  	$('#area').text(areaName);
+	//$('#sel_Area').text("");
+  	$('#sel_Area').text(areaName);
   	$('#hid_Area').val(areaName);
   }
   
@@ -87,15 +184,13 @@ String req_datepicker1 =null;
 if(request.getParameter("hid_datepicker1") != null  && !request.getParameter("hid_datepicker1").equals("To date") && request.getParameter("hid_datepicker")!="")
 req_datepicker1=request.getParameter("hid_datepicker1");
 
-ConnectToCloudSQL objConnectToCloudSQL = new ConnectToCloudSQL();
-
 BarChartHelper objBarChartHelper= new BarChartHelper();
 objBarChartHelper.getConnection();
 
 Iterator<String> colAreaItr=objBarChartHelper.colArea.iterator();
 Iterator<String> colSubAreaItr=objBarChartHelper.colSubArea.iterator();
 
-objBarChartHelper.getBarChartData(req_Area,req_SubArea,req_datepicker,req_datepicker1);
+/* objBarChartHelper.getBarChartData(req_Area,req_SubArea,req_datepicker,req_datepicker1,"popularbarchart",null);
 String scatVal=objBarChartHelper.scattValue;
 String scatVal1=objBarChartHelper.scattValue1;
 String scatVal2=objBarChartHelper.scattValue2;
@@ -107,11 +202,12 @@ ArrayList<String> colBedRooms=objBarChartHelper.colBedRooms;
 
 Iterator<String> colItrBuildNames =colBuildNames.iterator();
 Iterator<String> colItrBedRooms =colBedRooms.iterator();
-
+ */
 %>
 
-<body class="" onload="onloadchanges()">
-<form action="BuildingPieChart.jsp" method="post">
+<body class="">
+<!-- <form action="PopularBuildingsBarChart.jsp" method="post"> -->
+ <form method="post"> 
 
    <!-- Main Container Fluid -->
     <div class="container-fluid menu-hidden">
@@ -154,7 +250,7 @@ Iterator<String> colItrBedRooms =colBedRooms.iterator();
 				 <li><input type="text" id="datepicker" name="date" class="tcal" value="From date"/> </li>
                                  <li><input type="text" id="datepicker1" name="date1" class="tcal" value="To date"> </li>
 
-				<li><input type ="submit" value="Show Report" name="B1"/> </li>
+				<li><input type ="button" value="Show Report" name="B1" onclick="drawChart(); return false;"/> </li>
                        </ul>
                         </div>
                         <!-- //Row -->
@@ -184,13 +280,13 @@ Iterator<String> colItrBedRooms =colBedRooms.iterator();
             <!--  Side Menu -->
     <%@ include file="includes/footer.jsp" %>
     <!--  Side Menu -->
-        </div>
+      
    <input type="hidden" name="hid_Area" id="hid_Area">
 <input type="hidden" name="hid_SubArea" id="hid_SubArea">
 <input type="hidden" name="hid_datepicker" id="hid_datepicker">
 <input type="hidden" name="hid_datepicker1" id="hid_datepicker1">
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script Language="JavaScript">
+
+<%-- <script Language="JavaScript">
 
 
 function onloadchanges()
@@ -243,6 +339,7 @@ google.setOnLoadCallback(drawChart);
 			int j=1;
 			int sizes=colnum.size();
 			Iterator<Integer> itrnum= colnum.iterator();
+			System.out.println("i - "+ i);
 	%>
 	jsArr[<%= i %>] = new Array(); 
 	jsArr[<%= i %>][0]='<%= dat%>'; 
@@ -250,6 +347,9 @@ google.setOnLoadCallback(drawChart);
 			while(itrnum.hasNext())
 			{ 
 				int in=itrnum.next();
+				System.out.println("i - "+ i);
+				System.out.println("j - "+ j);
+				System.out.println("in - "+ in);
  	%>
 	jsArr[<%= i %>][<%= j %>]= '<%=in%>'; 
 	<% 
@@ -258,7 +358,7 @@ google.setOnLoadCallback(drawChart);
 			i++;
 		} 
 	%>
-
+	console.log("jsArr - "+ jsArr);
 var data = new google.visualization.DataTable();
 data.addColumn('string', 'Transaction Date');
 <%
@@ -267,6 +367,7 @@ while(colItrBedRooms.hasNext())
 	String strb=colItrBedRooms.next();
 %>
 var valb = '<%=strb%>';
+console.log("valb - "+ valb);
 data.addColumn('number', valb); 
 <%
 }
@@ -292,7 +393,7 @@ var options = {
     chart.draw(data, options);
 	  }
 
-    </script>
+    </script> --%>
 
         
          <!-- Global -->

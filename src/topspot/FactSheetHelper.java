@@ -1,7 +1,6 @@
 package topspot;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -49,7 +48,7 @@ public class FactSheetHelper {
 			conn = ConnectionUtil.getConnection(); //for getting google cloud sql connection from util class
 			DBName = objConstants.getValue("DBName"); //reading db name from properties file
 			
-			rs1 = conn.createStatement().executeQuery("SELECT DISTINCT(Building) FROM "+DBName+".building_database_final ORDER BY Building");
+			rs1 = conn.createStatement().executeQuery("SELECT DISTINCT(Building) FROM "+DBName+".Building_Database_final ORDER BY Building");
 			while(rs1.next())
 			{
 				String ss2= rs1.getString(1);
@@ -69,7 +68,7 @@ public class FactSheetHelper {
 			
 			if(req_Building != null && !req_Building.equals("null") && req_Building.length() > 0 && !req_Building.equals("All") )
 			{
-				String strquery="select City,Area,Building,Building_Type,Floors,Height,Completion,Developer FROM "+DBName+".building_database_final";
+				String strquery="select City,Area,Building,Building_Type,Floors,Height,Completion,Developer FROM "+DBName+".Building_Database_final";
 				strquery = strquery+" where Building='"+req_Building+"'";
 				scattValue=strquery;
 				System.out.println("scattValue --->"+scattValue);
@@ -82,9 +81,9 @@ public class FactSheetHelper {
 					objTopspotBean.setArea(rs.getString(2));
 					objTopspotBean.setBuilding(rs.getString(3));
 					objTopspotBean.setBuilding_Type(rs.getString(4));
-					objTopspotBean.setFloors(rs.getInt(5));
+					objTopspotBean.setFloors(new Integer(rs.getInt(5)).toString());
 					objTopspotBean.setHeight(rs.getInt(6));
-					objTopspotBean.setCompletion(rs.getInt(7));
+					objTopspotBean.setCompletion(new Integer(rs.getInt(7)).toString());
 					objTopspotBean.setDeveloper(rs.getString(8));
 					colPropValue.add(objTopspotBean);	
 				}

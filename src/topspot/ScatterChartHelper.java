@@ -183,11 +183,11 @@ public class ScatterChartHelper {
 			
 			//for Rent
 			String dynamciSqlQueryForRent = scatterChartQueryBuilder(tableName,"Rent",inputParametersForQuery);
-			rsBuildNamesForRent = ConnectionUtil.executeChartQueries(dynamciSqlQueryForRent);
+			rsBuildNamesForRent = ConnectionUtil.executeChartQueries(dynamciSqlQueryForRent,conn);
 			
 			//for Sales
 			String dynamciSqlQueryForSale = scatterChartQueryBuilder(tableName,"Sales",inputParametersForQuery);
-			rsBuildNamesForSale = ConnectionUtil.executeChartQueries(dynamciSqlQueryForSale);
+			rsBuildNamesForSale = ConnectionUtil.executeChartQueries(dynamciSqlQueryForSale,conn);
 			
 			while(colItrScatBuild.hasNext())
 			{

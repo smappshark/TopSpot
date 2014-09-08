@@ -1,3 +1,9 @@
+
+.searchBox{
+	width: 161px;
+	display: none;
+}
+
 .subnav{
 	width:100%;
 	float:left;
@@ -38,7 +44,6 @@
 }
 .subnav li:first-child{
 	border-left:none; 
-	width:105px;
 }
 #nav{
 	float:left;
@@ -50,7 +55,7 @@
 	position:absolute;
 	margin-top:1px;
 	padding-top:3px;
-	width:100px;
+	width:160px;
 }
 #nav ul li a{
 	background-image:none;
@@ -59,13 +64,19 @@
 	border-top:solid 1px #efefef;
 	border-left:none;
 	padding-top:5px;
+	font-size: 13px;
 }
 /*11-08-2014*/
 #nav ul li{
 	width:160px;
+	
 }
 #nav li ul{
-	box-shadow:7px 3px 5px #ccc;
+	box-shadow:1px 3px 5px #ccc;
+	height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background-color: #F8F8F8;
 }
 #nav li ul li a:hover{
 	color:#3695d5;

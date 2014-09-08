@@ -1,12 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-
-</head>
-<body>
 <!-- Sidebar Menu -->
         <div id="menu" class="hidden-print hidden-xs ">
             <div id="sidebar-discover-wrapper">
@@ -18,28 +9,31 @@
                 <ul class="list-unstyled">
                     <li class="active">
                         <a href="#sidebar-discover-social" class="glyphicons home" data-toggle="sidebar-discover">
-                         <!--    <span class="badge pull-right badge-primary hidden-md">7</span><i></i> --> 
+                           <!-- <span class="badge pull-right badge-primary hidden-md">7</span> -->
+                           <i></i> <!-- i tag to represent home icon -->   
                             <span>Home</span>
                         </a>
                         <div id="sidebar-discover-social" class="sidebar-discover-menu">
                             <div class="innerAll text-center border-bottom text-muted-dark">
                                 <strong>Home</strong>
-                                <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
-                                </button>
+                               <!--  <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
+                                </button> -->
                             </div>
                             <ul class="animated fadeIn">
-                                <li class="active"><a href="index.jsp">Analytics (Overview)</a>
+                                <li class="active"><a href="#" onclick="loadDashboard();">Analytics (Overview)</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                    
-                    <li>
-                        <a href="#sidebar-discover-media" class="glyphicons picture" data-toggle="sidebar-discover">
-                           <!--  <span class="badge pull-right badge-primary hidden-md">2</span><i></i> -->
+                    <li><a href="FactSheet.jsp" class="glyphicons building"><i></i><span>Screener</span></a>
+                    </li>
+                   <!-- <li>
+                        <a href="#sidebar-discover-media" class="glyphicons building" data-toggle="sidebar-discover">
+                             <span class="badge pull-right badge-primary hidden-md">2</span>
+                           <i></i>  
                             <span>Screener</span>
                         </a>
-                      <!--    <div id="sidebar-discover-media" class="sidebar-discover-menu">
+                          <div id="sidebar-discover-media" class="sidebar-discover-menu">
                             <div class="innerAll text-center border-bottom text-muted-dark">
                                 <strong>Screener</strong>
                                 <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
@@ -51,11 +45,13 @@
                                 <li><a href="gallery.html?lang=en"><i class="fa fa-camera"></i> By Value</a>
                                 </li>
                             </ul>
-                        </div> -->
+                        </div> 
+                    </li>-->
+                     <li><a href="#" class="glyphicons google_maps" onclick="loadSalesAndRentMap();"><i></i><span>Maps</span></a>
                     </li>
-                    <li>
-                        <a href="#sidebar-discover-email" class="glyphicons envelope" data-toggle="sidebar-discover"><i></i><span>Maps</span></a>
-                       <!--  <div id="sidebar-discover-email" class="sidebar-discover-menu">
+                   <!--  <li>
+                        <a href="#sidebar-discover-email" class="glyphicons google_maps" data-toggle="sidebar-discover"><i></i><span>Maps</span></a>
+                         <div id="sidebar-discover-email" class="sidebar-discover-menu">
                             <div class="innerAll text-center border-bottom text-muted-dark">
                                 <strong>Email</strong>
                                 <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
@@ -67,60 +63,58 @@
                                 <li><a href="email_compose.html?lang=en"><i class="fa fa-pencil"></i> Compose</a>
                                 </li>
                             </ul>
-                        </div> -->
-                    </li>
+                        </div> 
+                    </li> -->
                     <li>
-                        <a href="#sidebar-discover-courses" class="glyphicons stats" data-toggle="sidebar-discover"><i></i><span>Technical Analysis</span></a>
-                       <div id="sidebar-discover-courses" class="sidebar-discover-menu">
+                     <a href="#sidebar-discover-courses" class="glyphicons stats" data-toggle="sidebar-discover"><i></i><span>Technical Analysis</span></a>
+                            <div id="sidebar-discover-courses" class="sidebar-discover-menu">
                             <div class="innerAll text-center border-bottom text-muted-dark">
                                 <strong>Technical Analysis</strong>
-                                <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
-                                </button>
+                              <!--   <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
+                                </button> -->
                             </div>
                             <ul class="animated fadeIn">
-                                <li><a href="LineChart.jsp"><i class="fa fa-circle-o"></i> Line Chart</a>
+                                <li><a href="LineChart.jsp"><i class="fa fa-circle-o"></i>Line Chart</a>
                                 </li>
-                                <li><a href="courses_listing.html?lang=en"><i class="fa fa-circle-o"></i> Statistics</a>
+                                <li><a href="#" onclick="loadHistogramChart();"><i class="fa fa-circle-o"></i>Histogram</a>
                                 </li>
-                                <li><a href="histogram.jsp"><i class="fa fa-circle-o"></i> Histogram</a>
+                                 <li><a href="#" onclick="loadGRTChart();"><i class="fa fa-circle-o"></i>Growth Rate Matrix</a>
                                 </li>
-                                 <li><a href="growthreturnmatrix.jsp"><i class="fa fa-circle-o"></i>Growth Rate Matrix</a>
-                                </li>
-                                 <li><a href="PopularBuildingsBarChart.jsp"><i class="fa fa-circle-o"></i> Bar Chart</a>
+                              <!--   <li><a href="PopularBuildingsBarChart.jsp"><i class="fa fa-circle-o"></i>Bar Chart</a>
                                 </li>
                                 <li><a href="BuildingPieChart.jsp"><i class="fa fa-circle-o"></i>Pie Chart</a>
-                                </li>
+                                </li> --> 
                             </ul>
                         </div> 
                     </li>
                     <li>
-                        <a href="#sidebar-discover-support" data-toggle="sidebar-discover" class="glyphicons life_preserver"><i></i><span>Elements</span></a>
+                        <a href="#sidebar-discover-support" data-toggle="sidebar-discover" class="glyphicons charts"><i></i><span>Elements</span></a>
                        <div id="sidebar-discover-support" class="sidebar-discover-menu">
                             <div class="innerAll text-center border-bottom text-muted-dark">
                                 <strong>Elements</strong>
-                                <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
-                                </button>
+                              <!--   <button class="btn btn-xs btn-default close-discover"><i class="fa fa-fw fa-times"></i>
+                                </button> -->
                             </div>
                             <ul class="animated fadeIn">
                                 <li>
-                                    <a href="support_tickets.html?lang=en">
+                                    <a href="#">
                                        <!--  <span class="badge pull-right badge-inverse">45</span><i class="fa fa-ticket"></i> -->
                                         <span>Tables</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="support_forum_overview.html?lang=en"><i class="fa fa-folder-o"></i>
+                                    <a href="#"><i class="fa fa-folder-o"></i>
                                         <span>Forms</span>
                                     </a>
                                 </li>
-                                <li><a href="support_forum_post.html?lang=en"><i class="fa fa-folder-o"></i><span>Queries</span></a>
+                                <li><a href="#"><i class="fa fa-folder-o"></i><span>Queries</span></a>
                                 </li>
-                                <li><a href="support_kb.html?lang=en"><i class="fa fa-file-text-o"></i><span>Charts</span></a>
+                                <li><a href="#"><i class="fa fa-file-text-o"></i><span>Charts</span></a>
                                 </li>
                             </ul>
                         </div> 
                     </li>
-                     <li><a href="error.html?lang=en" class="glyphicons warning_sign"><i></i><span>Manage/Settings</span></a>
+                     <li><a class="glyphicons wrench"><i></i><span>Manage/Settings</span></a>
                     </li>
                    <!--  <li>
                         <a href="#sidebar-discover-medical" data-toggle="sidebar-discover" class="glyphicons circle_plus"><i></i><span>Medical</span></a>
@@ -336,6 +330,3 @@
             </div>
         </div>
         <!-- // Sidebar Menu END -->
-   
-</body>
-</html>

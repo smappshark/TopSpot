@@ -11,10 +11,13 @@ public class BuildingTrendDetails {
 	private String City;
 	private String Area;
 	private String Building_Type;
-	private int Floors;
+	private String Floors;
 	private int Height;
-	private int Completion;
+	private String Completion;
 	private String Developer;
+	private String usageType;
+	private String buildingStatus;
+	
 	public String getCity() {
 		return City;
 	}
@@ -33,10 +36,10 @@ public class BuildingTrendDetails {
 	public void setBuilding_Type(String building_Type) {
 		Building_Type = building_Type;
 	}
-	public int getFloors() {
+	public String getFloors() {
 		return Floors;
 	}
-	public void setFloors(int floors) {
+	public void setFloors(String floors) {
 		Floors = floors;
 	}
 	public int getHeight() {
@@ -45,10 +48,10 @@ public class BuildingTrendDetails {
 	public void setHeight(int height) {
 		Height = height;
 	}
-	public int getCompletion() {
+	public String getCompletion() {
 		return Completion;
 	}
-	public void setCompletion(int completion) {
+	public void setCompletion(String completion) {
 		Completion = completion;
 	}
 	public String getDeveloper() {
@@ -86,6 +89,19 @@ public class BuildingTrendDetails {
 	}
 	public void setToTrandate(Date toTrandate) {
 		this.toTrandate = toTrandate;
+	}
+	public String getUsage() {
+		return usageType;
+	}
+	public void setUsage(String usageType) {
+		this.usageType = usageType;
+	}
+	
+	public String getBuildingStatus() {
+		return buildingStatus;
+	}
+	public void setBuildingStatus(String buildingStatus) {
+		this.buildingStatus = buildingStatus;
 	}
 	
 }

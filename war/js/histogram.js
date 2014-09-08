@@ -1,6 +1,4 @@
-google.load("visualization", "1", {
-    packages: ["corechart"]
-});
+
 
 function drawHistogram(dataArray) {
     function drawChart() {
@@ -20,8 +18,10 @@ function drawHistogram(dataArray) {
     }
     google.setOnLoadCallback(drawChart, true);
 }
+
+
 jQuery(document).ready(function() {
-    jQuery(".loader").show();
+    //jQuery(".loader").show();
     jQuery("#dataContainer").hide();
 
     function createAndReturnElementOption(value, text) {
@@ -31,26 +31,32 @@ jQuery(document).ready(function() {
         return option;
     }
 
-    jQuery.get('ActionServlet', {
+   /* jQuery.get('ActionServlet', {
         serviceName: "getBedrooms"
     }, function(responseJson) {
         jQuery(".loader").hide();
         if (responseJson && responseJson.constructor === Array) {
-            var select = document.getElementById("ddBedrooms");
+            var ulInnerHtml = '';
             if (Object.keys(responseJson).length > 0) {
                 select.appendChild(createAndReturnElementOption(-1, "Select Bedrooms"));
                 for (var i = 0; i < responseJson.length; i++) {
                     select.appendChild(createAndReturnElementOption(responseJson[i].Bedrooms, responseJson[i].Bedrooms));
                 }
             }
+            for (var i = 0; i < responseJson.length; i++) {
+            	ulInnerHtml = ulInnerHtml + "<li><a href='#' onclick='selectedBedrooms(" + responseJson[i].Bedrooms + ");'>"+responseJson[i].Bedrooms+"</a></li>";
+            }
+            if(responseJson.length > 0){
+            	$('#dynamicBedroomLi').append(ulInnerHtml);
+            }
         }
 
-    });
+    });*/
 
-    jQuery('select#ddBedrooms').change(function(event) {
-        jQuery(".loader").show();
+    jQuery('#bedroom').click(function(event) {
+      //  jQuery(".loader").show();
         jQuery("#dataContainer").hide();
-        var $bedrooms = jQuery("select#ddBedrooms").val();
+        var $bedrooms = jQuery("#ddBedrooms").val();
         if ($bedrooms != "-1") {
             jQuery.get('ActionServlet', {
                 serviceName: "getBedroomHistogram",
@@ -60,8 +66,8 @@ jQuery(document).ready(function() {
                 jQuery(".loader").hide();
                 if (responseJson && responseJson.constructor === Array && responseJson.length > 0) {
                     var intervals = 20;
-                    var minPrice = responseJson[0].Price_AED;
-                    var maxPrice = responseJson[responseJson.length - 1].Price_AED;
+                    var minPrice = responseJson[0].Price_sqft;
+                    var maxPrice = responseJson[responseJson.length - 1].Price_sqft;
                     var range = parseInt((maxPrice - minPrice) / intervals, 10);
                     var priceRange = [0, 0],
                         dataArray = [],
@@ -69,7 +75,7 @@ jQuery(document).ready(function() {
                         obj = {};
                     for (var i = 0; i <= responseJson.length; i++) {
                         if (priceRange[1] === 0) {
-                            priceRange[1] = parseFloat(responseJson[i].Price_AED) + range;
+                            priceRange[1] = parseFloat(responseJson[i].Price_sqft) + range;
                         }
                         if (!obj.Range && !obj.Count) {
                             obj = {
@@ -77,7 +83,7 @@ jQuery(document).ready(function() {
                                 Range: ""
                             };
                         }
-                        if (responseJson[i] && responseJson[i].Price_AED > priceRange[0] && responseJson[i].Price_AED <= priceRange[1]) {
+                        if (responseJson[i] && responseJson[i].Price_sqft > priceRange[0] && responseJson[i].Price_sqft <= priceRange[1]) {
                             obj.Count = obj.Count + responseJson[i].Count;
                             obj.Range = priceRange.join(",");
                         } else {
@@ -90,7 +96,7 @@ jQuery(document).ready(function() {
                             };
                             if (responseJson[i]) {
                                 priceRange[0] = priceRange[1];
-                                priceRange[1] = parseFloat(responseJson[i].Price_AED) + range;
+                                priceRange[1] = parseFloat(responseJson[i].Price_sqft) + range;
                                 i--;
                             }
                         }

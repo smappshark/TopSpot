@@ -11,14 +11,14 @@
 <html class="sidebar sidebar-discover">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Topspot</title>
 <script src="js/components/library/jquery/jquery.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/library/jquery/jquery-migrate.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/library/modernizr/modernizr.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/plugins/less-js/less.min.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
     <script src="js/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v1.0.3-rc2"></script>
     <script src="js/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v1.0.3-rc2&sv=v0.0.1.1"></script>
-  
+  	<script type="text/javascript" src="https://www.google.com/jsapi"></script> 
     
      <link rel="stylesheet" href="css/admin/module.admin.stylesheet-complete.sidebar_type.discover.min.css"/>
     
@@ -59,6 +59,50 @@
 		}
 	})
 </script>
+ <script>
+  
+  var jsArr = new Array();  
+//Load the Visualization API and the piechart package.
+  google.load('visualization', '1', {'packages':['corechart']});
+
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.setOnLoadCallback(drawChart);
+  
+  function drawChart(){
+	 
+		jQuery.get('ActionServlet', {
+	      serviceName: "getPieChartData",
+	    }, function(responseJson) {
+	       
+	    	if (responseJson && responseJson.constructor === Array && responseJson.length > 0) {
+	    		var areaListJson = responseJson[0].areaList;
+				var areaCountListJson = responseJson[0].areaCountList;
+				var googleData = [["SubArea Name", "Number of buildings per Area"]]
+				for  (var i = 0; i < areaListJson.length; i++) {
+					var adata = [];
+					adata.push(areaListJson[i]);
+					adata.push(areaCountListJson[i]);
+					googleData.push(adata);
+	        	}
+	          
+	      		var options = {
+					title : "Top 10 Buildings per Area",
+					width : 400,
+					height : 400,
+					is3D : true
+				};
+	      		var data = google.visualization.arrayToDataTable(googleData);
+				var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+				chart.draw(data, options);
+	         }
+	        	 
+	       
+
+	    });
+	  return false;
+	  
+  }
+ </script> 
 </head>
 <%
 		String DBName = null;
@@ -244,11 +288,11 @@
 			}*/
 		strquery = strquery
 				+ " GROUP BY Sub_Area ORDER BY COUNT(Sub_Area) DESC LIMIT 10";
-			System.out.println(strquery);
+			System.out.println("strquery - "+strquery);
 		ResultSet rs = conn.createStatement().executeQuery(strquery);
 	%>
-<body class="" onload="onloadchanges()">
-<form action="BuildingPieChart.jsp" method="post">
+<body class="" >
+<form method="post">
 
    <!-- Main Container Fluid -->
     <div class="container-fluid menu-hidden">
@@ -268,7 +312,15 @@
                         <div class="subnav">
                        <ul id="nav">
 				<!--  area start -->
-				<li><a href="#" id="area">Area</a>
+		
+				  <% if(req_Area != null && req_Area != "") {
+						%>
+						<li><a href="#" id="area"><%=req_Area%></a> <%
+ 							} else {
+						%>
+						<li><a href="#" id="area">Area</a> <%
+						 	}
+						 %>
 					<ul>
 						<%
 							if (rs6 != null) {
@@ -290,7 +342,15 @@
 				<!--  area end -->
 
 				<!--  Building type start -->
-				<li><a href="#" id="sel_Building_Type">Building Type</a>
+			
+				  <% if(req_Building_Type != null && req_Building_Type != "") {
+						%>
+						<li><a href="#" id="sel_Building_Type"><%=req_Building_Type%></a> <%
+ 							} else {
+						%>
+						<li><a href="#" id="sel_Building_Type">Building Type</a> <%
+						 	}
+						 %>
 					<ul>
 						<%
 							if (rs2 != null) {
@@ -315,8 +375,15 @@
 				<!--  Building type end -->
 
 				<!--  Building Status start -->
-				<li><a href="#" id="sel_Building_Status">Building
-						Status</a>
+				
+					  <% if(req_Building_Status != null && req_Building_Status != "") {
+						%>
+						<li><a href="#" id="sel_Building_Status"><%=req_Building_Status%></a> <%
+ 							} else {
+						%>
+						<li><a href="#" id="sel_Building_Status">Building	Status</a> <%
+						 	}
+						 %>
 					<ul>
 						<%
 							if (rs3 != null) {
@@ -341,8 +408,15 @@
 				<!--  Building Status end -->
 
 				<!--  Structural Material start -->
-				<li><a href="#" id="sel_Structural_Material">Structural
-						Material</a>
+					
+						 <% if(req_Structural_Material != null && req_Structural_Material != "") {
+						%>
+						<li><a href="#" id="sel_Structural_Material"><%=req_Structural_Material%></a> <%
+ 							} else {
+						%>
+						<li><a href="#" id="sel_Structural_Material">Structural	Material</a> <%
+						 	}
+						 %>
 					<ul>
 						<%
 							if (rs4 != null) {
@@ -366,7 +440,14 @@
 					</ul></li>
 				<!--  Structural Material end -->
 				<!--  Architectural Style start -->
-				<li><a href="#" id="sel_Architectural_Style">Architectural	Style</a>
+				 <% if(req_Architectural_Style != null && req_Architectural_Style != "") {
+						%>
+						<li><a href="#" id="sel_Architectural_Style"><%=req_Architectural_Style%></a> <%
+ 							} else {
+						%>
+						<li><a href="#" id="sel_Architectural_Style">Architectural	Style</a> <%
+						 	}
+						 %>
 					<ul>
 						<%
 							if (rs5 != null) {
@@ -420,7 +501,7 @@
             <!--  Side Menu -->
     <%@ include file="includes/footer.jsp" %>
     <!--  Side Menu -->
-        </div>
+        
     <input type="hidden" name="hid_Area" id="hid_Area"> 
     <input type="hidden" name="hid_Building_Type" id="hid_Building_Type">
 	<input type="hidden" name="hid_Building_Status"	id="hid_Building_Status"> 
@@ -428,7 +509,7 @@
 	<input type="hidden" name="hid_Architectural_Style"	id="hid_Architectural_Style"> 
 	<input type="hidden" name="hid_datepicker" id="hid_datepicker"> 
 	<input type="hidden" name="hid_datepicker1" id="hid_datepicker1">
-      	<script type="text/javascript" src="https://www.google.com/jsapi"></script> 
+    <%--   	<script type="text/javascript" src="https://www.google.com/jsapi"></script> 
 												<script Language="JavaScript">
 
 
@@ -461,7 +542,7 @@
 													}
 
 													
-												</script>
+												</script> --%>
 
         
          <!-- Global -->

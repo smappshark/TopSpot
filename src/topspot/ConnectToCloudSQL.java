@@ -1,9 +1,7 @@
 package topspot;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,8 +13,7 @@ import com.topspot.common.Constants;
 
 public class ConnectToCloudSQL {
 	String url = null;
-	//String req_Building =null;
-	
+		
 	ResultSet rs1 = null;
 	public static Connection conn =null;
 	String ss1=null;
@@ -42,31 +39,10 @@ public class ConnectToCloudSQL {
 	public String Todate1=null;
 	public String DBName="TameerClientDB";
 	
-	public ArrayList<String> getConnection()
+	/*public ArrayList<String> getConnection()
 	{
 		try
 		{
-		/*	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) 
-			{
-			  // Load the class that provides the new "jdbc:google:mysql://" prefix.
-			  Class.forName("com.mysql.jdbc.GoogleDriver");
-			  url = "jdbc:google:mysql://optimum-time-518:tameer-db/TameerClientDB?user=root";
-			} 
-			else 
-			{*/
-			  // Local MySQL instance to use during development.
-			//Class.forName("com.mysql.jdbc.Driver");
-			//url = "jdbc:mysql://192.168.10.192:3306/topspot?user=root";
-			//commenetd by gopal on 31-07-2014
-			/*Class.forName("com.mysql.jdbc.GoogleDriver");
-	        url = "jdbc:google:mysql://optimum-time-518:tameer-db/TameerClientDB?user=root";
-			DBName = "TameerClientDB";*/ 
-			//commenetd by gopal on 31-07-2014
-	//		}
-			//commenetd by gopal on 31-07-2014
-			//conn = DriverManager.getConnection(url);
-			//commenetd by gopal on 31-07-2014
-			
 			//added by gopal on 31-07-2014
 			Constants objConstants = new Constants(); //for reading properties file 
 			conn = ConnectionUtil.getConnection(); //for getting google cloud sql connection from util class
@@ -98,21 +74,36 @@ public class ConnectToCloudSQL {
 		{
 		}
 		return colBuildin;
-	}
+	}*/
 	
-	public List<BuildingTrendDetails> getLineChartData(String req_Building1,String req_Building2,String req_Building3,String req_datepicker, String req_datepicker1)
+	public List<BuildingTrendDetails> getLineChartData(String req_Building1,String req_Building2,String req_Building3,String req_Building4,String req_Building5,String req_datepicker, String req_datepicker1)
 	{
 		List<BuildingTrendDetails> colBuildingTrendDetails=new ArrayList<BuildingTrendDetails>();
+		String Fromdate1=null;
+		String Todate1=null;
+		String buildingType="";
+		String developer="";
+		String buildingStatus="";
+		String building="";
+		String area="";
+		String noOfFloors="";
+		String completionYear="";
+		String usageType="";
 		try 
 		{
+			
+			Constants objConstants = new Constants(); //for reading properties file 
+			conn = ConnectionUtil.getConnection(); //for getting google cloud sql connection from util class
+			DBName = objConstants.getValue("DBName"); //reading db name from properties file
+			
 		//	req_Building="'23 Marina'";
 			if(req_Building1!=null || req_Building2!=null || req_Building3!=null)
 			{
 				build1 = req_Building1;
 				build2 = req_Building2;
 				build3 = req_Building3;
-				String Fromdate1=null;
-				String Todate1=null;
+				
+			
 				System.out.println("req_Building1 --->"+req_Building1);
 				System.out.println("req_Building2 --->"+req_Building2);
 				System.out.println("req_Building3 --->"+req_Building3);
@@ -150,8 +141,12 @@ public class ConnectToCloudSQL {
 					}
 				}
 				
-				String strquery = queryBuilder(req_Building1,req_Building2,req_Building3,DBName);
-				ResultSet rs = ConnectionUtil.executeChartQueries(strquery);
+				String strquery = queryBuilder(req_Building1,req_Building2,req_Building3,req_Building4,req_Building5,DBName);
+				System.out.println("strquery --->"+strquery);
+				
+				ResultSet rs = ConnectionUtil.executeChartQueries(strquery,conn);
+				
+				
 				
 				if(req_Building1!=null)
 				{
@@ -159,19 +154,53 @@ public class ConnectToCloudSQL {
 					int recordsize1=0;
 					int recordsize2=0;
 					BuildingTrendDetails objBuildingTrendDetails1 = new BuildingTrendDetails();
+					
 					if(Fromdate1!=null && Fromdate1.length()==10)
 					{
-						//String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE tran_date= '"+Fromdate1+"' and building in('"+req_Building1+"')";
-						//String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('"+req_Building1+"')";
-						//buildin1From = strquery;
-						//ResultSet rs = conn.createStatement().executeQuery(strquery);
 						if(rs!=null)
 						{
 							if(rs.next())
 							{
 								recordsize1 = recordsize1+1;
+								
+								buildingType=rs.getString(4);
+								 developer=rs.getString(5);
+								 buildingStatus=rs.getString(6);
+								 building=rs.getString(7);
+								 area=rs.getString(8);
+								 noOfFloors= new Integer(rs.getInt(9)).toString();
+								 completionYear= new Integer(rs.getInt(10)).toString();
+								 usageType=rs.getString(11);
+								 
+									
+								if(buildingType != null && buildingType != "")
+									objBuildingTrendDetails1.setBuilding_Type(buildingType);
+								
+								if(developer != null && developer != "")
+									objBuildingTrendDetails1.setDeveloper(developer);
+								
+								if(buildingStatus != null && buildingStatus != "")
+									objBuildingTrendDetails1.setBuildingStatus(buildingStatus);
+								
+								if(building != null && building != "")
+									objBuildingTrendDetails1.setBuilding(building);
+								
+								if(area != null && area != "")
+									objBuildingTrendDetails1.setArea(area);
+								
+								if(noOfFloors != null && noOfFloors != "")
+									objBuildingTrendDetails1.setFloors(noOfFloors);
+								
+								if(completionYear != null && completionYear != "")
+									objBuildingTrendDetails1.setCompletion(completionYear);
+								
+								if(usageType != null && usageType != "")
+									objBuildingTrendDetails1.setUsage(usageType);
+								
 								String toBuildingName2=rs.getString(1);
 								Date ToDateVal2=rs.getDate(3);
+								//String formattedDate = DateUtil.formatDate(ToDateVal2.toString());
+    							 
 								if(toBuildingName2 != null	&& ToDateVal2 !=null)
 								{
 									System.out.println("objBuildingTrendDetails1 condition0 entered --->");
@@ -182,12 +211,9 @@ public class ConnectToCloudSQL {
 							}
 						}
 					}
+					
 					if(Todate1!=null && Todate1.length()==10)
 					{
-						//String strquery1="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE tran_date= '"+Todate1+"' and building in('"+req_Building1+"')";
-						//String strquery1="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('"+req_Building1+"')";
-						//buildin1To = strquery1;
-						//ResultSet rss = conn.createStatement().executeQuery(strquery1);
 						if(rs!=null)
 						{
 								recordsize2 = recordsize2+1;
@@ -226,18 +252,53 @@ public class ConnectToCloudSQL {
 				//	req_Building2="'29 Burj Boulevard Tower 1'";
 					int recordsize1=0;
 					int recordsize2=0;
+					
 					BuildingTrendDetails objBuildingTrendDetails2 = new BuildingTrendDetails();
+					
+					
+					
+					
 					if(Fromdate1!=null && Fromdate1.length()==10)
 					{
-						//String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE tran_date= '"+Fromdate1+"' and building in('"+req_Building2+"')";
-						//String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('"+req_Building2+"')";
-						//buildin2From = strquery;
-//						ResultSet rs = conn.createStatement().executeQuery(strquery);
 						if(rs!=null)
 						{
 							if(rs.next())
 							{
-								recordsize1 = recordsize1+1;
+								 recordsize1 = recordsize1+1;
+								
+								 buildingType=rs.getString(4);
+								 developer=rs.getString(5);
+								 buildingStatus=rs.getString(6);
+								 building=rs.getString(7);
+								 area=rs.getString(8);
+								 noOfFloors= new Integer(rs.getInt(9)).toString();
+								 completionYear= new Integer(rs.getInt(10)).toString();
+								 usageType=rs.getString(11);
+								
+								if(buildingType != null && buildingType != "")
+									objBuildingTrendDetails2.setBuilding_Type(buildingType);
+								
+								if(developer != null && developer != "")
+									objBuildingTrendDetails2.setDeveloper(developer);
+								
+								if(buildingStatus != null && buildingStatus != "")
+									objBuildingTrendDetails2.setBuildingStatus(buildingStatus);
+								
+								if(building != null && building != "")
+									objBuildingTrendDetails2.setBuilding(building);
+								
+								if(area != null && area != "")
+									objBuildingTrendDetails2.setArea(area);
+								
+								if(noOfFloors != null && noOfFloors != "")
+									objBuildingTrendDetails2.setFloors(noOfFloors);
+								
+								if(completionYear != null && completionYear != "")
+									objBuildingTrendDetails2.setCompletion(completionYear);
+								
+								if(usageType != null && usageType != "")
+									objBuildingTrendDetails2.setUsage(usageType);
+								
 								String toBuildingName2=rs.getString(1);
 								Date ToDateVal2=rs.getDate(3);
 								if(toBuildingName2 != null	&& ToDateVal2 !=null)
@@ -252,15 +313,9 @@ public class ConnectToCloudSQL {
 					}
 					if(Todate1!=null && Todate1.length()==10)
 					{
-						//String strquery1="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE tran_date= '"+Todate1+"' and building in('"+req_Building2+"')";
-						//String strquery1="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('"+req_Building2+"')";
-						//buildin2To = strquery1;
-						//ResultSet rss = conn.createStatement().executeQuery(strquery1);
 						if(rs!=null)
 						{
 								recordsize2 = recordsize2+1;
-								//objBuildingTrendDetails1.setBuilding(rss.getString(1));
-								//int topsqftval=rss.getInt(2);
 								Date ToDateVal1=rs.getDate(3);
 								String toBuildingName=rs.getString(1);
 								if(toBuildingName != null && objBuildingTrendDetails2.getBuilding()!=null &&
@@ -287,24 +342,58 @@ public class ConnectToCloudSQL {
 						}
 					}
 				}
+				
+				
 				if(req_Building3!=null)
 				{
 					build3="Entered here also once again";
-				//	req_Building="'29 Burj Boulevard Tower 1'";
 					int recordsize1=0;
 					int recordsize2=0;
 					BuildingTrendDetails objBuildingTrendDetails3 = new BuildingTrendDetails();
+					
+					
 					if(Fromdate1!=null && Fromdate1.length()==10)
 					{
-						//String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE tran_date= '"+Fromdate1+"' and building in('"+req_Building3+"')";
-						//String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('"+req_Building3+"')";
-						//buildin3From = strquery;
-						//ResultSet rs = conn.createStatement().executeQuery(strquery);
 						if(rs!=null)
 						{
 							if(rs.next())
 							{
+								
 							recordsize1 = recordsize1+1;
+							 buildingType=rs.getString(4);
+							 developer=rs.getString(5);
+							 buildingStatus=rs.getString(6);
+							 building=rs.getString(7);
+							 area=rs.getString(8);
+							 noOfFloors= new Integer(rs.getInt(9)).toString();
+							 completionYear= new Integer(rs.getInt(10)).toString();
+							 usageType=rs.getString(11);
+							
+							if(buildingType != null && buildingType != "")
+								objBuildingTrendDetails3.setBuilding_Type(buildingType);
+							
+							if(developer != null && developer != "")
+								objBuildingTrendDetails3.setDeveloper(developer);
+							
+							if(buildingStatus != null && buildingStatus != "")
+								objBuildingTrendDetails3.setBuildingStatus(buildingStatus);
+							
+							if(building != null && building != "")
+								objBuildingTrendDetails3.setBuilding(building);
+							
+							if(area != null && area != "")
+								objBuildingTrendDetails3.setArea(area);
+							
+							if(noOfFloors != null && noOfFloors != "")
+								objBuildingTrendDetails3.setFloors(noOfFloors);
+							
+							if(completionYear != null && completionYear != "")
+								objBuildingTrendDetails3.setCompletion(completionYear);
+							
+							if(usageType != null && usageType != "")
+								objBuildingTrendDetails3.setUsage(usageType);
+							
+							
 							String toBuildingName2=rs.getString(1);
 							Date ToDateVal2=rs.getDate(3);
 								if(toBuildingName2 != null	&& ToDateVal2 !=null)
@@ -319,10 +408,6 @@ public class ConnectToCloudSQL {
 					}
 					if(Todate1!=null && Todate1.length()==10)
 					{
-						//String strquery1="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE tran_date= '"+Todate1+"' and building in('"+req_Building3+"')";
-						//String strquery1="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('"+req_Building3+"')";
-//						buildin3To = strquery1;
-//						ResultSet rss = conn.createStatement().executeQuery(strquery1);
 						if(rs!=null)
 						{
 								recordsize2 = recordsize2+1;
@@ -353,29 +438,288 @@ public class ConnectToCloudSQL {
 					}
 				}
 				
+				if(req_Building4!=null)
+				{
+					build3="Entered here also once again";
+					int recordsize1=0;
+					int recordsize2=0;
+					BuildingTrendDetails objBuildingTrendDetails4 = new BuildingTrendDetails();
+					
+					
+					if(Fromdate1!=null && Fromdate1.length()==10)
+					{
+						if(rs!=null)
+						{
+							if(rs.next())
+							{
+								
+							recordsize1 = recordsize1+1;
+							 buildingType=rs.getString(4);
+							 developer=rs.getString(5);
+							 buildingStatus=rs.getString(6);
+							 building=rs.getString(7);
+							 area=rs.getString(8);
+							 noOfFloors= new Integer(rs.getInt(9)).toString();
+							 completionYear= new Integer(rs.getInt(10)).toString();
+							 usageType=rs.getString(11);
+							
+							if(buildingType != null && buildingType != "")
+								objBuildingTrendDetails4.setBuilding_Type(buildingType);
+							
+							if(developer != null && developer != "")
+								objBuildingTrendDetails4.setDeveloper(developer);
+							
+							if(buildingStatus != null && buildingStatus != "")
+								objBuildingTrendDetails4.setBuildingStatus(buildingStatus);
+							
+							if(building != null && building != "")
+								objBuildingTrendDetails4.setBuilding(building);
+							
+							if(area != null && area != "")
+								objBuildingTrendDetails4.setArea(area);
+							
+							if(noOfFloors != null && noOfFloors != "")
+								objBuildingTrendDetails4.setFloors(noOfFloors);
+							
+							if(completionYear != null && completionYear != "")
+								objBuildingTrendDetails4.setCompletion(completionYear);
+							
+							if(usageType != null && usageType != "")
+								objBuildingTrendDetails4.setUsage(usageType);
+							
+							
+							String toBuildingName2=rs.getString(1);
+							Date ToDateVal2=rs.getDate(3);
+								if(toBuildingName2 != null	&& ToDateVal2 !=null)
+								{
+									System.out.println("objBuildingTrendDetails4 condition0 entered --->");
+									objBuildingTrendDetails4.setBuilding(toBuildingName2);
+									objBuildingTrendDetails4.setFromPriPerSqft(rs.getInt(2));
+									objBuildingTrendDetails4.setFromTrandate(ToDateVal2);
+								}
+							}
+						}
+					}
+					if(Todate1!=null && Todate1.length()==10)
+					{
+						if(rs!=null)
+						{
+								recordsize2 = recordsize2+1;
+								Date ToDateVal1=rs.getDate(3);
+								String toBuildingName=rs.getString(1);
+								if(toBuildingName != null && objBuildingTrendDetails4.getBuilding()!=null &&
+										objBuildingTrendDetails4.getBuilding().equalsIgnoreCase(toBuildingName) 
+								&& ToDateVal1 !=null)
+								{
+									System.out.println("objBuildingTrendDetails4 condition1 entered --->");
+									objBuildingTrendDetails4.setToPriPerSqft(rs.getInt(2));
+									objBuildingTrendDetails4.setToTrandate(ToDateVal1);
+								}
+							
+						}
+					}
+					System.out.println("objBuildingTrendDetails4 recordsize1 --->"+recordsize1);
+					System.out.println("objBuildingTrendDetails4 recordsize2 --->"+recordsize2);
+					if(recordsize1> 0 && recordsize2 >0)
+					{
+						if(objBuildingTrendDetails4 != null && objBuildingTrendDetails4.getBuilding() !=null
+						&& objBuildingTrendDetails4.getFromTrandate() !=null
+						&& objBuildingTrendDetails4.getToTrandate() !=null)
+						{
+							System.out.println("objBuildingTrendDetails4 condition2 entered --->");
+							colBuildingTrendDetails.add(objBuildingTrendDetails4);
+						}
+					}
+				}
+				if(req_Building5!=null)
+				{
+					build3="Entered here also once again";
+					int recordsize1=0;
+					int recordsize2=0;
+					BuildingTrendDetails objBuildingTrendDetails5 = new BuildingTrendDetails();
+					
+					
+					if(Fromdate1!=null && Fromdate1.length()==10)
+					{
+						if(rs!=null)
+						{
+							if(rs.next())
+							{
+								
+							recordsize1 = recordsize1+1;
+							 buildingType=rs.getString(4);
+							 developer=rs.getString(5);
+							 buildingStatus=rs.getString(6);
+							 building=rs.getString(7);
+							 area=rs.getString(8);
+							 noOfFloors= new Integer(rs.getInt(9)).toString();
+							 completionYear= new Integer(rs.getInt(10)).toString();
+							 usageType=rs.getString(11);
+							
+							if(buildingType != null && buildingType != "")
+								objBuildingTrendDetails5.setBuilding_Type(buildingType);
+							
+							if(developer != null && developer != "")
+								objBuildingTrendDetails5.setDeveloper(developer);
+							
+							if(buildingStatus != null && buildingStatus != "")
+								objBuildingTrendDetails5.setBuildingStatus(buildingStatus);
+							
+							if(building != null && building != "")
+								objBuildingTrendDetails5.setBuilding(building);
+							
+							if(area != null && area != "")
+								objBuildingTrendDetails5.setArea(area);
+							
+							if(noOfFloors != null && noOfFloors != "")
+								objBuildingTrendDetails5.setFloors(noOfFloors);
+							
+							if(completionYear != null && completionYear != "")
+								objBuildingTrendDetails5.setCompletion(completionYear);
+							
+							if(usageType != null && usageType != "")
+								objBuildingTrendDetails5.setUsage(usageType);
+							
+							
+							String toBuildingName2=rs.getString(1);
+							Date ToDateVal2=rs.getDate(3);
+								if(toBuildingName2 != null	&& ToDateVal2 !=null)
+								{
+									System.out.println("objBuildingTrendDetails5 condition0 entered --->");
+									objBuildingTrendDetails5.setBuilding(toBuildingName2);
+									objBuildingTrendDetails5.setFromPriPerSqft(rs.getInt(2));
+									objBuildingTrendDetails5.setFromTrandate(ToDateVal2);
+								}
+							}
+						}
+					}
+					if(Todate1!=null && Todate1.length()==10)
+					{
+						if(rs!=null)
+						{
+								recordsize2 = recordsize2+1;
+								Date ToDateVal1=rs.getDate(3);
+								String toBuildingName=rs.getString(1);
+								if(toBuildingName != null && objBuildingTrendDetails5.getBuilding()!=null &&
+										objBuildingTrendDetails5.getBuilding().equalsIgnoreCase(toBuildingName) 
+								&& ToDateVal1 !=null)
+								{
+									System.out.println("objBuildingTrendDetails5 condition1 entered --->");
+									objBuildingTrendDetails5.setToPriPerSqft(rs.getInt(2));
+									objBuildingTrendDetails5.setToTrandate(ToDateVal1);
+								}
+							
+						}
+					}
+					System.out.println("objBuildingTrendDetails5 recordsize1 --->"+recordsize1);
+					System.out.println("objBuildingTrendDetails5 recordsize2 --->"+recordsize2);
+					if(recordsize1> 0 && recordsize2 >0)
+					{
+						if(objBuildingTrendDetails5 != null && objBuildingTrendDetails5.getBuilding() !=null
+						&& objBuildingTrendDetails5.getFromTrandate() !=null
+						&& objBuildingTrendDetails5.getToTrandate() !=null)
+						{
+							System.out.println("objBuildingTrendDetails5 condition2 entered --->");
+							colBuildingTrendDetails.add(objBuildingTrendDetails5);
+						}
+					}
+				}
+				 buildingType=null;
+				 developer=null;
+				 buildingStatus=null;
+				 building=null;
+				 area=null;
+				 usageType=null;
+				
 			}
 			else
 			{
-					String strquery="SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton limit 0";
+				/*	String strquery="SELECT newton.Building,AVG(newton.Price_sqft),newton.tran_date,bdf.Building_Type,bdf.Developer,bdf.Building_Status,bdf.Building,bdf.Area,bdf.Floors,bdf.Completion,bdf.UsageType FROM TameerClientDB.newton as newton,TameerClientDB.Building_Database_final as bdf WHERE newton.building = bdf.Building GROUP BY newton.Building ORDER BY newton.tran_date desc LIMIT 5";
 					ResultSet rs = conn.createStatement().executeQuery(strquery);
-					//ResultSet rss = conn.createStatement().executeQuery(strquery);
+					BuildingTrendDetails objBuildingTrendDetails = new BuildingTrendDetails();
+					if(rs!=null)
+					{
+						while(rs.next())
+						{
+							
+							buildingType=rs.getString(4);
+							 developer=rs.getString(5);
+							 buildingStatus=rs.getString(6);
+							 building=rs.getString(7);
+							 area=rs.getString(8);
+							 noOfFloors= new Integer(rs.getInt(9)).toString();
+							 completionYear= new Integer(rs.getInt(10)).toString();
+							 usageType=rs.getString(11);
+							 
+								System.out.println("buildingType --->"+buildingType);
+								System.out.println("developer --->"+developer);
+								System.out.println("buildingStatus --->"+buildingStatus);
+								System.out.println("building --->"+building);
+								System.out.println("area --->"+area);
+								System.out.println("noOfFloors --->"+noOfFloors);
+								System.out.println("completionYear --->"+completionYear);
+								System.out.println("usageType --->"+usageType);
+								
+							if(buildingType != null && buildingType != "")
+								objBuildingTrendDetails.setBuilding_Type(buildingType);
+							
+							if(developer != null && developer != "")
+								objBuildingTrendDetails.setDeveloper(developer);
+							
+							if(buildingStatus != null && buildingStatus != "")
+								objBuildingTrendDetails.setBuildingStatus(buildingStatus);
+							
+							if(building != null && building != "")
+								objBuildingTrendDetails.setBuilding(building);
+							
+							if(area != null && area != "")
+								objBuildingTrendDetails.setArea(area);
+							
+							if(noOfFloors != null && noOfFloors != "")
+								objBuildingTrendDetails.setFloors(noOfFloors);
+							
+							if(completionYear != null && completionYear != "")
+								objBuildingTrendDetails.setCompletion(completionYear);
+							
+							if(usageType != null && usageType != "")
+								objBuildingTrendDetails.setUsage(usageType);
+							
+							String toBuildingName2=rs.getString(1);
+							Date ToDateVal2=rs.getDate(3);
+							if(toBuildingName2 != null	&& ToDateVal2 !=null)
+							{
+								System.out.println("objBuildingTrendDetails1 condition0 entered --->");
+								objBuildingTrendDetails.setBuilding(toBuildingName2);
+								objBuildingTrendDetails.setFromPriPerSqft(rs.getInt(2));
+								objBuildingTrendDetails.setFromTrandate(ToDateVal2);
+							}
+							colBuildingTrendDetails.add(objBuildingTrendDetails);
+						}
+					}*/
+					
+					
 			}
+			
+			
 			
 		}
 		catch(Exception ex)
 		{
 			System.out.println("objBuildingTrendDetails exception --->"+ex);
 			build1= "Entered here with exception"+ex.getMessage();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return colBuildingTrendDetails;
 	}
 	
-	public static String queryBuilder(String req_Building1,String req_Building2,String req_Building3,String DBName){
-		String lineChartBuildQuery = "SELECT Building,AVG(Price_sqft),tran_date FROM "+DBName+".newton WHERE building in('";
-		
+	public static String queryBuilder(String req_Building1,String req_Building2,String req_Building3,String req_Building4,String req_Building5,String DBName){
+		//String lineChartBuildQuery = "SELECT Building,AVG(Price_sqft),tran_date,City,Bedrooms,Price_sqft,Build_Type,Build_Area,Sub_Area,Building,com_res,rent_sales FROM "+DBName+".newton WHERE building in('";
+		String lineChartBuildQuery = "SELECT newton.Building,AVG(newton.Price_sqft),newton.tran_date,bdf.Building_Type,bdf.Developer,bdf.Building_Status,bdf.Building,bdf.Area,bdf.Floors,bdf.Completion,bdf.UsageType FROM TameerClientDB.newton as newton,TameerClientDB.Building_Database_final as bdf WHERE newton.building in(";
 		if(req_Building1 != null)
 		{
-			lineChartBuildQuery = lineChartBuildQuery + req_Building1 + "','";
+			lineChartBuildQuery = lineChartBuildQuery + "'" + req_Building1 + "','";
 		}
 		if(req_Building2 != null)
 		{
@@ -384,8 +728,20 @@ public class ConnectToCloudSQL {
 		
 		if(req_Building3 != null)
 		{
-			lineChartBuildQuery = lineChartBuildQuery + req_Building3 + "') GROUP BY Building";
+			lineChartBuildQuery = lineChartBuildQuery + req_Building3 + "','";
 		}
+		
+		if(req_Building4 != null)
+		{
+			lineChartBuildQuery = lineChartBuildQuery + req_Building4 + "','";
+		}
+		
+		if(req_Building5 != null)
+		{
+			lineChartBuildQuery = lineChartBuildQuery + req_Building5 + "'";
+		}
+		
+			lineChartBuildQuery = lineChartBuildQuery + ") and newton.building = bdf.Building GROUP BY newton.Building LIMIT 10";
 		
 		return lineChartBuildQuery;
 	}

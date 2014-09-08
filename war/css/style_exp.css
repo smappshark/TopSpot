@@ -41,3 +41,20 @@
 .dataTbl tr:nth-child(even) {
 	background: #DFF5FC;
 }
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #000;
+    font: 14px Arial, Helvetica, sans-serif;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #000;
+    font: 14px Arial, Helvetica, sans-serif;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #000;
+    font: 14px Arial, Helvetica, sans-serif;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #000;
+    font: 14px Arial, Helvetica, sans-serif;
+}

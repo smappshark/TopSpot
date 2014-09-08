@@ -12,6 +12,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import topspot.BuildingTrendDetails;
+import topspot.TopspotBean;
+
 import com.google.gson.Gson;
 import com.topspot.ConnectionUtil;
 import com.topspot.common.Constants;
@@ -57,7 +60,7 @@ public class BuildingDao {
 
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return buildings;
@@ -89,7 +92,7 @@ public class BuildingDao {
 
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return buildings;
@@ -126,7 +129,7 @@ public class BuildingDao {
 
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return buildings;
@@ -173,7 +176,10 @@ public class BuildingDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 
 		return buildingList;
 	}
@@ -188,7 +194,10 @@ public class BuildingDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 	}
 
 	public static String getArea() {
@@ -210,10 +219,27 @@ public class BuildingDao {
 			return executeQuery(query);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return null;
 	}
 
+	public static String getDistinctBuildingNames() {
+		try {
+			String query = "SELECT DISTINCT(Building) FROM  "
+					+ DBName
+					+ ".Building_Database_final ORDER BY Building";
+			return executeQuery(query);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
+		}
+
+		return null;
+	}
 	public static String getSubAreaByArea(String area) {
 
 		try {
@@ -223,7 +249,10 @@ public class BuildingDao {
 			return executeQuery(query);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return null;
 
 	}
@@ -236,7 +265,10 @@ public class BuildingDao {
 			return executeQuery(query);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return null;
 
 	}
@@ -251,7 +283,10 @@ public class BuildingDao {
 			return executeQuery(query);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return null;
 
 	}
@@ -274,7 +309,7 @@ public class BuildingDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return "";
@@ -299,7 +334,7 @@ public class BuildingDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return "";
@@ -325,7 +360,7 @@ public class BuildingDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return "";
@@ -351,7 +386,7 @@ public class BuildingDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return null;
@@ -375,7 +410,10 @@ public class BuildingDao {
 				return executeQuery(query);
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally {
+				ConnectionUtil.closeConnection();
 			}
+
 		}
 		return null;
 	}
@@ -408,7 +446,7 @@ public class BuildingDao {
 
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return areaDetails;
@@ -422,14 +460,21 @@ public class BuildingDao {
 			while (rs.next()) {
 				Map<String, String> map = new LinkedHashMap<String, String>();
 				for (int i = 1; i <= columns; ++i) {
-					map.put(md.getColumnName(i), rs.getObject(i).toString());
+					if(rs.getObject(i) != null) {
+						map.put(md.getColumnName(i), rs.getObject(i).toString());
+					} else {
+						map.put(md.getColumnName(i), "");
+					}
 				}
 				listMap.add(map);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return listMap;
 	}
 
@@ -458,7 +503,7 @@ public class BuildingDao {
 
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeConnection(conn);
+			ConnectionUtil.closeConnection();
 		}
 
 		return buildings;
@@ -478,7 +523,10 @@ public class BuildingDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 
 		return buildingList;
 	}
@@ -494,23 +542,30 @@ public class BuildingDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 
 		return buildingList;
 	}
+	
 	public static List<Building> convertToBedroomHistogramList(ResultSet rs) {
 		List<Building> buildingList = new ArrayList<Building>();
 		try {
 			while (rs.next()) {
 				Building build = new Building();
 				build.setCount(rs.getInt("Count"));
-				build.setPrice_AED(rs.getString("Price_AED"));
+				build.setPrice_AED(rs.getString("Price_sqft"));
 				buildingList.add(build);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 
 		return buildingList;
 	}
@@ -534,7 +589,10 @@ public class BuildingDao {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally {
+				ConnectionUtil.closeConnection();
 			}
+
 		}
 		return null;
 	}
@@ -554,18 +612,45 @@ public class BuildingDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			ConnectionUtil.closeConnection();
 		}
+
 		return objBedrooms;
 	}
 
-	public static List<Building> getBedroomHistogram(String bedrooms) {
+	public static List<Building> getBedroomHistogram(String bedrooms,String area,String building) {
 		List<Building> objBedrooms = null;
+		Boolean isFlag = false;
 		if (StringUtils.isNotEmpty(bedrooms)) {
 			Connection conn = null;
 			try {
+				String query = "SELECT COUNT(Bedrooms) AS Count, Price_sqft FROM " + DBName + ".newton WHERE ";
 				conn = ConnectionUtil.getConnection();
-	
-				String query = "SELECT COUNT(Bedrooms) AS Count, Price_AED FROM " + DBName + ".newton WHERE Bedrooms=\"" + bedrooms + "\" GROUP BY Price_AED  Order By Price_AED ASC";
+				
+				if(!bedrooms.equals("null") & !bedrooms.equals("")){
+				 query =  query + "Bedrooms=\"" + bedrooms + "\"";
+				 isFlag = true;
+				}
+				if(!area.equals("null") & !area.equals("")){
+					if(isFlag)
+						query =  query + " and Build_Area=\"" + area + "\"";
+					else
+						query =  query + "Build_Area=\"" + area + "\"";
+					
+					isFlag = true;
+				}
+				if(!building.equals("null") & !building.equals("")){
+					 if(isFlag)
+							query =  query + " and Building=\"" + building + "\"";
+						else
+							query =  query + "Building=\"" + building + "\"";
+				}
+				
+				query = query + " GROUP BY Price_sqft  Order By Price_sqft ASC";
+				
+				System.out.println("histogram query - "+query);
+				
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
 	
@@ -574,7 +659,10 @@ public class BuildingDao {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally {
+				ConnectionUtil.closeConnection();
 			}
+
 		}
 		return objBedrooms;
 	}
@@ -613,11 +701,269 @@ public class BuildingDao {
 				//e.printStackTrace();
 				objTopSpotResponse.setCode(1);
 				objTopSpotResponse.setMessage(e.getMessage());
+			}finally {
+				ConnectionUtil.closeConnection();
 			}
+
 		} else {
 			objTopSpotResponse.setCode(1);
 			objTopSpotResponse.setMessage("Input was empty...");
 		}
 		return objTopSpotResponse;
+	}
+	
+	public static List<Map<String, String>> getAllAreasSubAreasBuildings() {
+		List<Map<String, String>> details = new ArrayList<Map<String, String>>();
+		Connection conn = null;
+		try {
+			conn = ConnectionUtil.getConnection();
+			if (conn != null) {
+				String query = "SELECT Area, Sub_Area, Building, Building_Type FROM " + DBName
+						+ ".Building_Database_final BDF WHERE BDF.Latitude!=0 AND BDF.Longitude!=0";
+
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+
+				if (rs != null) {
+					details = convertToResponse(rs);
+				}
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			ConnectionUtil.closeConnection();
+		}
+
+		return details;
+	}
+
+	public static List<Map<String, String>> getSaleAndRentTrendsInfo(String building,
+			String bedrooms, int minPrice, int maxPrice,
+			String buildingType) {
+		List<Map<String, String>> details = new ArrayList<Map<String, String>>();
+		Connection conn = null;
+		try {
+			conn = ConnectionUtil.getConnection();
+			if (conn != null) {
+				String query = "SELECT bdf.*, n.Price_sqft, n.rent_sales FROM  " + DBName
+						+ ".Building_Database_final bdf INNER JOIN  " + DBName
+						+ ".newton n on n.Build_Area = bdf.Area OR n.Sub_Area = bdf.Sub_Area OR n.Building = bdf.Building"
+						+ " WHERE  bdf.Latitude!=0 AND bdf.Longitude!=0 AND (bdf.Area = '" + building + "'"
+						+ " OR bdf.Sub_Area='" + building + "'" + " OR bdf.Building='" + building + "')"
+						+ " AND n.Price_sqft BETWEEN " + minPrice + " AND " + maxPrice
+						+ " and bdf.Building_Type='" + buildingType + "' LIMIT 200";
+		
+				System.out.println(query);
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+
+				if (rs != null) {
+					details = convertToResponse(rs);
+				}
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			ConnectionUtil.closeConnection();
+		}
+
+		return details;
+	}
+
+	public static List<Map<String, String>> getLineChartDataByBuilding(
+			String building) {
+		List<Map<String, String>> details = new ArrayList<Map<String, String>>();
+		Connection conn = null;
+		try {
+			conn = ConnectionUtil.getConnection();
+			if (conn != null) {
+
+				String query = "SELECT tran_date, Price_sqft FROM  " + DBName
+						+ ".newton "
+						+ "WHERE Building='" + building
+						+ "' GROUP BY tran_date ORDER BY tran_date";
+				System.out.println(query);
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+
+				if (rs != null) {
+					details = convertToResponse(rs);
+				}
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			ConnectionUtil.closeConnection();
+		}
+
+		return details;
+	}
+	
+	public static List<TopspotBean> getPieChartData() {
+		List<String> subAreaList = new ArrayList<String>();
+		List<Integer> subAreaCountList = new ArrayList<Integer>();
+		List<TopspotBean> subAreaDetails = new ArrayList<TopspotBean>();
+		TopspotBean topspotBean = new TopspotBean();
+		Connection conn = null;
+		
+		try {
+			conn = ConnectionUtil.getConnection();
+			if (conn != null) {
+				String query = "SELECT Sub_Area, COUNT(Sub_Area) FROM TameerClientDB.Building_Database_final  GROUP BY Sub_Area ORDER BY COUNT(Sub_Area) DESC LIMIT 10";
+				System.out.println(query);
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				if (rs != null) {
+
+					while (rs.next()) {// loop to iterate resultset
+						String subArea = rs.getString(1);// temp variable to hold buildng name
+						Integer subAreaCount = rs.getInt(2);
+						subAreaList.add(subArea);
+						subAreaCountList.add(subAreaCount);
+					}
+					topspotBean.setAreaList(subAreaList);
+					topspotBean.setAreaCountList(subAreaCountList);
+					subAreaDetails.add(topspotBean);
+				}	
+				
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} 
+		return subAreaDetails;
+	}
+	
+	public static List<BuildingTrendDetails> getBuildingInfo(String reqBuilding1,String reqBuilding2,String reqBuilding3,String reqBuilding4,String reqBuilding5) {
+		List<BuildingTrendDetails> buildingDetails = new ArrayList<BuildingTrendDetails>();
+		Connection conn = null;
+		
+		String buildingType="";
+		String developer="";
+		String buildingStatus="";
+		String building="";
+		String area="";
+		String noOfFloors="";
+		String completionYear="";
+		String usageType="";
+		
+		BuildingTrendDetails objBuildingTrendDetails = new BuildingTrendDetails();
+		Constants objConstants = new Constants(); //for reading properties file 
+		String DBName = objConstants.getValue("DBName"); //reading db name from properties file
+		
+		try {
+			conn = ConnectionUtil.getConnection();
+			if (conn != null) {
+				String query = buidlingInfoQueryBuilder(reqBuilding1,reqBuilding2,reqBuilding3, reqBuilding4, reqBuilding5,DBName);
+				System.out.println(query);
+				
+				if(query == null){
+					query = ""; //to do 
+				}
+				Statement stmt = conn.createStatement();
+				
+				ResultSet rs = stmt.executeQuery(query);
+				if (rs != null) {
+
+					while (rs.next()) {// loop to iterate resultset
+						buildingType=rs.getString(4);
+						 developer=rs.getString(5);
+						 buildingStatus=rs.getString(6);
+						 building=rs.getString(7);
+						 area=rs.getString(8);
+						 noOfFloors= new Integer(rs.getInt(9)).toString();
+						 completionYear= new Integer(rs.getInt(10)).toString();
+						 usageType=rs.getString(11);
+						 
+							
+						if(buildingType != null && buildingType != "")
+							objBuildingTrendDetails.setBuilding_Type(buildingType);
+						
+						if(developer != null && developer != "")
+							objBuildingTrendDetails.setDeveloper(developer);
+						
+						if(buildingStatus != null && buildingStatus != "")
+							objBuildingTrendDetails.setBuildingStatus(buildingStatus);
+						
+						if(building != null && building != "")
+							objBuildingTrendDetails.setBuilding(building);
+						
+						if(area != null && area != "")
+							objBuildingTrendDetails.setArea(area);
+						
+						if(noOfFloors != null && noOfFloors != "")
+							objBuildingTrendDetails.setFloors(noOfFloors);
+						
+						if(completionYear != null && completionYear != "")
+							objBuildingTrendDetails.setCompletion(completionYear);
+						
+						if(usageType != null && usageType != "")
+							objBuildingTrendDetails.setUsage(usageType);
+					}
+					
+					buildingDetails.add(objBuildingTrendDetails);
+				}	
+				
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} 
+		return buildingDetails;
+	}
+	
+	
+	public static String buidlingInfoQueryBuilder(String req_Building1,String req_Building2,String req_Building3,String req_Building4,String req_Building5,String DBName){
+		//String lineChartBuildQuery = "SELECT Building,AVG(Price_sqft),tran_date,City,Bedrooms,Price_sqft,Build_Type,Build_Area,Sub_Area,Building,com_res,rent_sales FROM "+DBName+".newton WHERE building in('";
+		int i = 0;
+		StringBuilder lineChartBuildQuery = new StringBuilder("SELECT Building,Building_Type,Developer,Building_Status,Building,Area,Floors,Completion,UsageType FROM TameerClientDB.Building_Database_final as bdf WHERE Building in(");
+		if(req_Building1 != null)
+		{
+			lineChartBuildQuery.append("'" + req_Building1 + "','");
+		}else{
+			i++;
+		}
+		if(req_Building2 != null)
+		{
+			lineChartBuildQuery.append( req_Building2 + "','");
+		}else{
+			i++;
+		}
+		
+		if(req_Building3 != null)
+		{
+			lineChartBuildQuery.append( req_Building3 + "','");
+		}else{
+			i++;
+		}
+		
+		if(req_Building4 != null)
+		{
+			lineChartBuildQuery.append( req_Building4 + "','");
+		}else{
+			i++;
+		}
+		
+		if(req_Building5 != null)
+		{
+			lineChartBuildQuery.append(req_Building5 + "'");
+		}else{
+			i++;
+		}
+		
+		lineChartBuildQuery.append( ") GROUP BY Building LIMIT 10");
+			
+			if(i == 5)
+				lineChartBuildQuery = null;
+		
+		return lineChartBuildQuery.toString();
 	}
 }

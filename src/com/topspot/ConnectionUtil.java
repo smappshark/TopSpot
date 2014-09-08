@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.google.appengine.api.utils.SystemProperty;
 import com.topspot.common.Constants;
 import java.util.logging.Logger;
 /**
@@ -20,6 +19,7 @@ import java.util.logging.Logger;
 public class ConnectionUtil {
 	private static ConnectionUtil instance = new ConnectionUtil();
 	private static final Logger log = Logger.getLogger(ConnectionUtil.class.getName());
+	private static Connection connection;
 	private Constants objConstants = new Constants();
 	
 	 //private constructor
@@ -32,48 +32,39 @@ public class ConnectionUtil {
     }
     
     private Connection createConnection() {
-        Connection connection = null;
+       // Connection connection = null;
         String URL = null;
+        System.out.println("connection - "+connection);
+        
         try {
-        	URL = objConstants.getValue("DBUrl");
-        	log.info("DB URL: " + URL);
-            connection = DriverManager.getConnection(URL);
+        	if(connection ==  null || connection.isClosed()){
+        		 System.out.println("if connection - "+connection);
+	        	URL = objConstants.getValue("DBUrl");
+	        	log.info("DB URL: " + URL);
+	            connection = DriverManager.getConnection(URL);
+	            return connection;
+        	}else{
+        		 return connection;
+        	}
         } catch (SQLException e) {
         	log.severe(e.toString());
             System.out.println("ERROR: Unable to Connect to Database.");
+            return null;
         }
-        return connection;
+       
     }  
      
     //singleton method
 	public static Connection getConnection() throws Exception {
 		 return instance.createConnection();
-		/*Connection conn = null;
 		
-		try {
-			Class.forName(objConstants.getValue("DBDriver"));
-			url = objConstants.getValue("DBUrl") + objConstants.getValue("DBName") + "?user="
-					+ objConstants.getValue("DBUserName") + "&password=" + objConstants.getValue("DBPassword");
-			
-			 //url = "jdbc:google:mysql://optimum-time-518:tameer-db/TameerClientDB?user=root";
-			conn = DriverManager.getConnection(url);
-		} catch (SQLException sqle) {
-			System.out.println("SQLException:"
-					+ " Unable to open connection to db: " + sqle.getMessage());
-			throw sqle;
-		} catch (Exception e) {
-			System.out.println("Exception: Unable to open connection to db: "
-					+ e.getMessage());
-			throw e;
-		}
-		return conn;*/
 	}
 	
-public static ResultSet executeChartQueries(String strBuildQuery){
-	Connection conn = null;
+public static ResultSet executeChartQueries(String strBuildQuery,Connection conn){
+	//Connection conn = null;
 		//ResultSet rs = null;
 		try {
-			conn = getConnection();
+			//conn = getConnection();
 			ResultSet rs = conn.createStatement().executeQuery(strBuildQuery);
 			return rs;
 		} catch (SQLException sqlEx) {
@@ -106,14 +97,16 @@ public static ResultSet executeChartQueries(String strBuildQuery){
 					+ strQuery);
 			throw e;
 		} finally {
-			closeConnection(conn);
+			closeConnection();
 		}
 	}
 
-	public static void closeConnection(Connection conn) {
+	public static void closeConnection() {
 		try {
-			if (conn != null && !conn.isClosed()) {
-				conn.close();
+			if (connection != null && !connection.isClosed()) {
+				
+				connection.close();
+				connection = null;
 			}
 		} catch (SQLException sqle) {
 			System.out.println("Error while closing connection.");
